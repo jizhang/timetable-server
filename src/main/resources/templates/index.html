@@ -13,10 +13,38 @@
 <script th:inline="javascript">
 $(function() {
 	$('#calendar').fullCalendar({
+
 		defaultView: 'agendaWeek',
 		firstDay: 1,
 		allDaySlot: false,
-		events: [[@{/event/list}]]
+		timezone: 'local',
+		events: [[@{/event/list}]],
+
+		selectable: true,
+		selectHelper: true,
+		select: function(start, end) {
+			var title = prompt('Event Title:');
+			if (title) {
+
+				var eventData = {
+					title: title,
+					start: start.format('YYYY-MM-DD HH:mm:ss'),
+					end: end.format('YYYY-MM-DD HH:mm:ss')
+				};
+
+				$.post([[@{/event/add}]], eventData, function(result) {
+					if (result.status != 'ok') {
+						alert(result.msg);
+					}
+					eventData.id = result.id;
+				});
+
+				$('#calendar').fullCalendar('renderEvent', eventData);
+			}
+			$('#calendar').fullCalendar('unselect');
+		},
+
+		editable: true
 	});
 });
 </script>

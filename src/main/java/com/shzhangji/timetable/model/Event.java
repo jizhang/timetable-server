@@ -1,11 +1,11 @@
 package com.shzhangji.timetable.model;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-
-import org.joda.time.DateTime;
 
 import lombok.Data;
 
@@ -16,9 +16,9 @@ public class Event {
 	@GeneratedValue
 	private Integer id;
 	private String title;
-	private DateTime start;
-	private DateTime end;
+	private Date start;
+	private Date end;
 	@Column(updatable = false)
-	private DateTime created;
-	private DateTime updated;
+	private Date created;
+	private Date updated;
 }
