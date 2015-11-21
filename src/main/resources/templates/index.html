@@ -10,42 +10,10 @@
 <script th:src="@{/webjars/jquery/1.11.1/jquery.min.js}"></script>
 <script th:src="@{/webjars/momentjs/2.5.0/min/moment.min.js}"></script>
 <script th:src="@{/webjars/fullcalendar/2.4.0/fullcalendar.min.js}"></script>
+<script th:src="@{/js/event.js}"></script>
 <script th:inline="javascript">
-$(function() {
-	$('#calendar').fullCalendar({
-
-		defaultView: 'agendaWeek',
-		firstDay: 1,
-		allDaySlot: false,
-		timezone: 'local',
-		events: [[@{/event/list}]],
-
-		selectable: true,
-		selectHelper: true,
-		select: function(start, end) {
-			var title = prompt('Event Title:');
-			if (title) {
-
-				var eventData = {
-					title: title,
-					start: start.format('YYYY-MM-DD HH:mm:ss'),
-					end: end.format('YYYY-MM-DD HH:mm:ss')
-				};
-
-				$.post([[@{/event/add}]], eventData, function(result) {
-					if (result.status != 'ok') {
-						alert(result.msg);
-					}
-					eventData.id = result.id;
-				});
-
-				$('#calendar').fullCalendar('renderEvent', eventData);
-			}
-			$('#calendar').fullCalendar('unselect');
-		},
-
-		editable: true
-	});
+new Event({
+	contextPath: [[${#httpServletRequest.contextPath}]]
 });
 </script>
 </body>
