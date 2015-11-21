@@ -1,6 +1,24 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8" />
+<title>What Have You Done Today? - TimeTable</title>
+<link rel="stylesheet" th:href="@{/webjars/fullcalendar/2.4.0/fullcalendar.min.css}" />
+</head>
 <body>
-<h1>Event Count: <span th:text="${eventCount}"></span></h1>
+<div id="calendar"></div>
+<script th:src="@{/webjars/jquery/1.11.1/jquery.min.js}"></script>
+<script th:src="@{/webjars/momentjs/2.5.0/min/moment.min.js}"></script>
+<script th:src="@{/webjars/fullcalendar/2.4.0/fullcalendar.min.js}"></script>
+<script th:inline="javascript">
+$(function() {
+	$('#calendar').fullCalendar({
+		defaultView: 'agendaWeek',
+		firstDay: 1,
+		allDaySlot: false,
+		events: [[@{/event/list}]]
+	});
+});
+</script>
 </body>
 </html>
