@@ -1,18 +1,21 @@
 package com.shzhangji.timetable.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+
+import com.shzhangji.timetable.repository.EventRepository;
 
 @Controller
 public class HomeController {
 
-	@RequestMapping("")
-	public String index(@RequestParam(defaultValue = "stranger") String name,
-			Model model) {
+	@Autowired
+	private EventRepository eventRepo;
 
-		model.addAttribute("name", name);
+	@RequestMapping("")
+	public String index(Model model) {
+		model.addAttribute("eventCount", eventRepo.count());
 		return "index";
 	}
 
