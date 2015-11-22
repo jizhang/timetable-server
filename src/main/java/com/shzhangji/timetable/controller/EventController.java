@@ -38,14 +38,18 @@ public class EventController {
 		}).collect(Collectors.toList());
 	}
 
-	@RequestMapping("/add")
-	public Object add(EventForm eventForm) {
+	@RequestMapping("/save")
+	public Object save(@RequestParam(value = "id", required = false) Event event,
+			EventForm eventForm) {
 
 		Date now = new Date();
 
-		Event event = new Event();
+		if (event == null) {
+			event = new Event();
+			event.setCreated(now);
+		}
+
 		BeanUtils.copyProperties(eventForm, event);
-		event.setCreated(now);
 		event.setUpdated(now);
 		eventRepo.save(event);
 

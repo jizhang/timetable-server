@@ -9,6 +9,10 @@ var Event = function(opts) {
 Event.prototype = {
 	constructor: Event,
 
+	formatDate: function(dt) {
+		return dt.format('YYYY-MM-DD HH:mm:ss');
+	},
+
 	calcHeight: function() {
 		return $(window).height() - 50;
 	},
@@ -26,9 +30,10 @@ Event.prototype = {
 			timeFormat: 'HH:mm',
 			scrollTime: '08:00:00',
 			events: self.contextPath + '/event/list',
-
+			editable: true,
 			selectable: true,
 			selectHelper: true,
+
 			select: function(start, end) {
 				var title = prompt('Event Title:');
 				if (!title) {
@@ -36,21 +41,21 @@ Event.prototype = {
 					return;
 				}
 
-				var eventData = {
+				var data = {
 					title: title,
-					start: start.format('YYYY-MM-DD HH:mm:ss'),
-					end: end.format('YYYY-MM-DD HH:mm:ss')
+					start: self.formatDate(start),
+					end: self.formatDate(end)
 				};
 
-				$.post(self.contextPath + '/event/add', eventData, function(result) {
+				$.post(self.contextPath + '/event/save', data, function(result) {
 
 					if (result.status != 'ok') {
 						alert(result.msg);
 						return;
 					}
 
-					eventData.id = result.id;
-					$('#calendar').fullCalendar('renderEvent', eventData);
+					data.id = result.id;
+					$('#calendar').fullCalendar('renderEvent', data);
 					$('#calendar').fullCalendar('unselect');
 				});
 
@@ -70,11 +75,38 @@ Event.prototype = {
 						$('#calendar').fullCalendar('removeEvents', event.id);
 					});
 				}
+			},
+
+			eventDrop: function(event, delta, revertFunc) {
+				self.saveEvent(event, revertFunc);
+			},
+
+			eventResize: function(event, delta, revertFunc) {
+				self.saveEvent(event, revertFunc);
 			}
 		});
 
 		$(window).resize(function() {
 			$('#calendar').fullCalendar('option', 'height', self.calcHeight());
+		});
+	},
+
+	saveEvent: function(event, revertFunc) {
+		var self = this;
+
+		var data = {
+			id: event.id,
+			title: event.title,
+			start: self.formatDate(event.start),
+			end: self.formatDate(event.end)
+		};
+
+		$.post(self.contextPath + '/event/save', data, function(result) {
+			if (result.status != 'ok') {
+				alsert(result.msg);
+				revertFunc();
+				return;
+			}
 		});
 	},
 
