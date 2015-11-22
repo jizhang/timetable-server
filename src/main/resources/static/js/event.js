@@ -9,38 +9,51 @@ var Event = function(opts) {
 Event.prototype = {
 	constructor: Event,
 
+	calcHeight: function() {
+		return $(window).height() - 50;
+	},
+
 	init: function() {
 		var self = this;
 
 		$('#calendar').fullCalendar({
 
+			height: self.calcHeight(),
 			defaultView: 'agendaWeek',
 			firstDay: 1,
 			allDaySlot: false,
+			slotLabelFormat: 'HH:mm',
+			timeFormat: 'HH:mm',
+			scrollTime: '08:00:00',
 			events: self.contextPath + '/event/list',
 
 			selectable: true,
 			selectHelper: true,
 			select: function(start, end) {
 				var title = prompt('Event Title:');
-				if (title) {
-
-					var eventData = {
-						title: title,
-						start: start.format('YYYY-MM-DD HH:mm:ss'),
-						end: end.format('YYYY-MM-DD HH:mm:ss')
-					};
-
-					$.post(self.contextPath + '/event/add', eventData, function(result) {
-						if (result.status != 'ok') {
-							alert(result.msg);
-						}
-						eventData.id = result.id;
-					});
-
-					$('#calendar').fullCalendar('renderEvent', eventData);
+				if (!title) {
+					$('#calendar').fullCalendar('unselect');
+					return;
 				}
-				$('#calendar').fullCalendar('unselect');
+
+				var eventData = {
+					title: title,
+					start: start.format('YYYY-MM-DD HH:mm:ss'),
+					end: end.format('YYYY-MM-DD HH:mm:ss')
+				};
+
+				$.post(self.contextPath + '/event/add', eventData, function(result) {
+
+					if (result.status != 'ok') {
+						alert(result.msg);
+						return;
+					}
+
+					eventData.id = result.id;
+					$('#calendar').fullCalendar('renderEvent', eventData);
+					$('#calendar').fullCalendar('unselect');
+				});
+
 			},
 
 			eventClick: function(event) {
@@ -58,6 +71,10 @@ Event.prototype = {
 					});
 				}
 			}
+		});
+
+		$(window).resize(function() {
+			$('#calendar').fullCalendar('option', 'height', self.calcHeight());
 		});
 	},
 
