@@ -35,44 +35,101 @@ Event.prototype = {
 			selectHelper: true,
 
 			select: function(start, end) {
-				var title = prompt('Event Title:');
-				if (!title) {
-					$('#calendar').fullCalendar('unselect');
-					return;
-				}
 
-				var data = {
-					title: title,
-					start: self.formatDate(start),
-					end: self.formatDate(end)
-				};
+				$('#txtTitle').val('');
+				$('#dlgEvent').dialog('option', 'title', 'New Event');
+				$('#dlgEvent').dialog('option', 'buttons', {
+					'Save': function() {
 
-				$.post(self.contextPath + '/event/save', data, function(result) {
+						var title = $('#txtTitle').val();
+						if (!title) {
+							alert('Title cannot be empty.');
+							return;
+						}
 
-					if (result.status != 'ok') {
-						alert(result.msg);
-						return;
+						var event = {
+							title: title,
+							start: start,
+							end: end
+						};
+
+						self.saveEvent(event).done(function(id) {
+							event.id = id;
+							$('#calendar').fullCalendar('renderEvent', event);
+							$('#calendar').fullCalendar('unselect');
+							$('#dlgEvent').dialog('close');
+						});
+
+					},
+					'Cancel': function() {
+						$('#calendar').fullCalendar('unselect');
+						$('#dlgEvent').dialog('close');
 					}
-
-					data.id = result.id;
-					$('#calendar').fullCalendar('renderEvent', data);
-					$('#calendar').fullCalendar('unselect');
 				});
 
+				$('#dlgEvent').dialog('open');
 			},
 
 			eventClick: function(event) {
 				$('#txtTitle').val(event.title);
 				$('#dlgEvent').data('event', event);
+				$('#dlgEvent').dialog('option', 'title', 'Edit Event');
+				$('#dlgEvent').dialog('option', 'buttons', {
+					'Save': function() {
+
+						var title = $('#txtTitle').val();
+						if (!title) {
+							alert('Title cannot be empty.');
+							return false;
+						}
+
+						var event = $('#dlgEvent').data('event');
+						event.title = title;
+
+						self.saveEvent(event).done(function() {
+							$('#calendar').fullCalendar('updateEvent', event);
+							$('#dlgEvent').dialog('close');
+						});
+
+					},
+					'Delete': function() {
+
+						var event = $('#dlgEvent').data('event');
+
+						if (confirm('Delete this event?')) {
+
+							var data = {
+								id: event.id
+							};
+
+							$.post(self.contextPath + '/event/delete', data, function(result) {
+								if (result.status != 'ok') {
+									alert(result.msg);
+									return;
+								}
+								$('#calendar').fullCalendar('removeEvents', event.id);
+								$('#dlgEvent').dialog('close');
+							}).fail(function() {
+								alert('Unkown error.');
+							});
+
+						}
+
+					},
+					'Cancel': function() {
+						$('#dlgEvent').dialog('close');
+					}
+				});
+
 				$('#dlgEvent').dialog('open');
 			},
 
 			eventDrop: function(event, delta, revertFunc) {
-				self.saveEvent(event, revertFunc);
+				self.saveEvent(event).fail(revertFunc);
 			},
 
 			eventResize: function(event, delta, revertFunc) {
-				self.saveEvent(event, revertFunc);
+				self.saveEvent(event).fail(revertFunc);
 			}
 		});
 
@@ -85,60 +142,14 @@ Event.prototype = {
 			width: 400,
 			height: 300,
 			modal: true,
-			buttons: {
-				'Save': function() {
-
-					var event = $('#dlgEvent').data('event');
-					var title = $('#txtTitle').val();
-
-					if (title) {
-
-						var oldTitle = event.title;
-						event.title = title;
-						$('#calendar').fullCalendar('updateEvent', event);
-
-						self.saveEvent(event, function() {
-							event.title = oldTitle;
-							$('#calendar').fullCalendar('updateEvent', event);
-						});
-
-					}
-
-					$('#dlgEvent').dialog('close');
-
-				},
-				'Delete': function() {
-
-					var event = $('#dlgEvent').data('event');
-
-					if (confirm('Delete this event?')) {
-
-						var data = {
-							id: event.id
-						};
-
-						$.post(self.contextPath + '/event/delete', data, function(result) {
-							if (result.status != 'ok') {
-								alert(result.msg);
-							}
-							$('#calendar').fullCalendar('removeEvents', event.id);
-						});
-
-					}
-
-					$('#dlgEvent').dialog('close');
-
-				},
-				'Cancel': function() {
-					$('#dlgEvent').dialog('close');
-				}
-			}
 		});
 
 	},
 
-	saveEvent: function(event, revertFunc) {
+	saveEvent: function(event) {
 		var self = this;
+
+		var dfd = $.Deferred();
 
 		var data = {
 			id: event.id,
@@ -150,10 +161,16 @@ Event.prototype = {
 		$.post(self.contextPath + '/event/save', data, function(result) {
 			if (result.status != 'ok') {
 				alert(result.msg);
-				revertFunc();
+				dfd.reject();
 				return;
 			}
+			dfd.resolve(result.id);
+		}).fail(function() {
+			alert('Unkown error.');
+			dfd.reject();
 		});
+
+		return dfd.promise();
 	},
 
 	_theEnd: undefined
