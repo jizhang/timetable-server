@@ -3,6 +3,7 @@ var Event = function(opts) {
 	self.contextPath = opts.contextPath;
 	$(function() {
 		self.init();
+		self.initNote();
 	});
 };
 
@@ -144,6 +145,35 @@ Event.prototype = {
 			modal: true,
 		});
 
+	},
+
+	initNote: function() {
+		var self = this;
+
+		$('#btnNote').click(function() {
+			self.saveNote();
+		});
+
+		$('#txtNote').change(function() {
+			if (self.noteTimeout == null) {
+				self.noteTimeout = setTimeout(function() {
+					self.saveNote();
+					self.noteTimeout = null;
+				}, 5000);
+			}
+		});
+	},
+
+	saveNote: function() {
+		var self = this;
+
+		var data = {
+			content: $('#txtNote').val()
+		};
+
+		return $.post(self.contextPath + '/note/save', data, function(result) {
+			$('#spnNote').text(result.msg);
+		});
 	},
 
 	saveEvent: function(event) {
