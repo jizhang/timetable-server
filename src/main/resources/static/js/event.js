@@ -142,7 +142,7 @@ Event.prototype = {
 			autoOpen: false,
 			width: 400,
 			height: 300,
-			modal: true,
+			modal: true
 		});
 
 	},
