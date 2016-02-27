@@ -16,7 +16,10 @@
 <div id="calendar" style="width: 1000px;"></div>
 
 <div id="dlgEvent" style="overflow: hidden;">
-<textarea id="txtTitle" style="resize: none; width: 100%; height: 100%;"></textarea>
+Category: <select id="selCategory">
+<option th:each="item : ${categories}" th:value="${item.id}" th:text="${item.title}"></option>
+</select><br/>
+<textarea id="txtTitle" style="resize: none; width: 100%; height: 111px; margin-top: 10px;"></textarea>
 </div>
 
 <div id="divNote" style="position: absolute; left: 1024px; top: 10px;">
@@ -35,7 +38,8 @@
 <script th:src="@{/js/event.js}"></script>
 <script th:inline="javascript">
 new Event({
-	contextPath: [[${#httpServletRequest.contextPath}]]
+	contextPath: [[${#httpServletRequest.contextPath}]],
+	categories: [[${categories}]]
 });
 </script>
 </body>

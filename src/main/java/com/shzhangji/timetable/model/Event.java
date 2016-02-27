@@ -16,6 +16,7 @@ public class Event {
 	@GeneratedValue
 	private Integer id;
 	private String title;
+	private Integer categoryId;
 	private Date start;
 	private Date end;
 	@Column(updatable = false)

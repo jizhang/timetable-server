@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.shzhangji.timetable.model.Category;
 import com.shzhangji.timetable.model.Note;
 import com.shzhangji.timetable.repository.NoteRepository;
 
@@ -18,6 +19,7 @@ public class HomeController {
 	public String index(Model model) {
 		Note note = noteRepo.findTopByOrderByCreatedDesc();
 		model.addAttribute("note", note == null ? "" : note.getContent());
+		model.addAttribute("categories", Category.LIST);
 		return "index";
 	}
 

@@ -1,6 +1,7 @@
 var Event = function(opts) {
 	var self = this;
-	self.contextPath = opts.contextPath;
+	$.extend(self, opts);
+
 	$(function() {
 		self.init();
 		self.initNote();
@@ -37,25 +38,28 @@ Event.prototype = {
 
 			select: function(start, end) {
 
+				$('#selCategory').val(self.categories[0].id);
 				$('#txtTitle').val('');
 				$('#dlgEvent').dialog('option', 'title', 'New Event');
 				$('#dlgEvent').dialog('option', 'buttons', {
 					'Save': function() {
 
-						var title = $('#txtTitle').val();
-						if (!title) {
-							alert('Title cannot be empty.');
-							return;
-						}
-
 						var event = {
-							title: title,
+							categoryId: $('#selCategory').val(),
+							title: $('#txtTitle').val(),
 							start: start,
 							end: end
 						};
 
+						if (!self.validateEvent(event)) {
+							return false;
+						}
+
 						self.saveEvent(event).done(function(id) {
+
 							event.id = id;
+							event.color = self.findCategoryById(event.categoryId).color;
+
 							$('#calendar').fullCalendar('renderEvent', event);
 							$('#calendar').fullCalendar('unselect');
 							$('#dlgEvent').dialog('close');
@@ -72,22 +76,23 @@ Event.prototype = {
 			},
 
 			eventClick: function(event) {
+				$('#selCategory').val(event.categoryId);
 				$('#txtTitle').val(event.title);
 				$('#dlgEvent').data('event', event);
 				$('#dlgEvent').dialog('option', 'title', 'Edit Event');
 				$('#dlgEvent').dialog('option', 'buttons', {
 					'Save': function() {
 
-						var title = $('#txtTitle').val();
-						if (!title) {
-							alert('Title cannot be empty.');
+						var event = $('#dlgEvent').data('event');
+						event.categoryId = $('#selCategory').val();
+						event.title = $('#txtTitle').val();
+
+						if (!self.validateEvent(event)) {
 							return false;
 						}
 
-						var event = $('#dlgEvent').data('event');
-						event.title = title;
-
 						self.saveEvent(event).done(function() {
+							event.color = self.findCategoryById(event.categoryId).color;
 							$('#calendar').fullCalendar('updateEvent', event);
 							$('#dlgEvent').dialog('close');
 						});
@@ -142,7 +147,8 @@ Event.prototype = {
 			autoOpen: false,
 			width: 400,
 			height: 300,
-			modal: true
+			modal: true,
+			resizable: false
 		});
 
 	},
@@ -176,6 +182,22 @@ Event.prototype = {
 		});
 	},
 
+	validateEvent: function(event) {
+		var self = this;
+
+		if (!self.findCategoryById(event.categoryId)){
+			alert('Invalid category.');
+			return false;
+		}
+
+		if (!event.title) {
+			alert('Title cannot be empty.');
+			return false;
+		}
+
+		return true;
+	},
+
 	saveEvent: function(event) {
 		var self = this;
 
@@ -184,6 +206,7 @@ Event.prototype = {
 		var data = {
 			id: event.id,
 			title: event.title,
+			categoryId: event.categoryId,
 			start: self.formatDate(event.start),
 			end: self.formatDate(event.end)
 		};
@@ -201,6 +224,16 @@ Event.prototype = {
 		});
 
 		return dfd.promise();
+	},
+
+	findCategoryById: function(id) {
+		var self = this;
+		for (var i = 0; i < self.categories.length; ++i) {
+			if (self.categories[i].id == id) {
+				return self.categories[i];
+			}
+		}
+		return null;
 	},
 
 	_theEnd: undefined

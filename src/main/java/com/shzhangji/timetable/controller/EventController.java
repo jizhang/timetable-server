@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.google.common.collect.ImmutableMap;
 import com.shzhangji.timetable.form.EventForm;
+import com.shzhangji.timetable.model.Category;
 import com.shzhangji.timetable.model.Event;
 import com.shzhangji.timetable.repository.EventRepository;
 
@@ -34,6 +35,7 @@ public class EventController {
 		return events.stream().map(event -> {
 			EventForm form = new EventForm();
 			BeanUtils.copyProperties(event, form);
+			form.setColor(getEventColor(event));
 			return form;
 		}).collect(Collectors.toList());
 	}
@@ -62,6 +64,15 @@ public class EventController {
 	public Object delete(@RequestParam Integer id) {
 		eventRepo.delete(id);
 		return ImmutableMap.<String, Object> of("status", "ok");
+	}
+
+	private String getEventColor(Event event) {
+		for (Category item : Category.LIST) {
+			if (item.getId().equals(event.getCategoryId())) {
+				return item.getColor();
+			}
+		}
+		return Category.LIST.get(0).getColor();
 	}
 
 }
