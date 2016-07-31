@@ -2,6 +2,8 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="utf-8" />
+<meta name="_csrf" th:content="${_csrf.token}"/>
+<meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 <title>What Have You Done Today? - TimeTable</title>
 <link rel="stylesheet" th:href="@{/webjars/jquery-ui/1.11.4/jquery-ui.min.css}" />
 <link rel="stylesheet" th:href="@{/webjars/fullcalendar/2.4.0/fullcalendar.min.css}" />

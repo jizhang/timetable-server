@@ -3,6 +3,7 @@ var Event = function(opts) {
 	$.extend(self, opts);
 
 	$(function() {
+		self.initCsrf();
 		self.init();
 		self.initNote();
 	});
@@ -10,6 +11,14 @@ var Event = function(opts) {
 
 Event.prototype = {
 	constructor: Event,
+
+	initCsrf: function() {
+		var token = $('meta[name="_csrf"]').attr('content');
+		var header = $('meta[name="_csrf_header"]').attr('content');
+		$(document).ajaxSend(function(e, xhr, options) {
+			xhr.setRequestHeader(header, token);
+		});
+	},
 
 	formatDate: function(dt) {
 		return dt.format('YYYY-MM-DD HH:mm:ss');
