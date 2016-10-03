@@ -6,6 +6,7 @@ var Event = function(opts) {
 		self.initCsrf();
 		self.init();
 		self.initNote();
+		self.initPing();
 	});
 };
 
@@ -18,6 +19,17 @@ Event.prototype = {
 		$(document).ajaxSend(function(e, xhr, options) {
 			xhr.setRequestHeader(header, token);
 		});
+	},
+
+	initPing: function() {
+		var self = this;
+		setInterval(function() {
+			$.post(self.contextPath + '/ping').fail(function() {
+				if (confirm('Ping error, reload?')) {
+					window.location.reload();
+				}
+			});
+		}, 55 * 1000);
 	},
 
 	formatDate: function(dt) {
