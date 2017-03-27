@@ -1,4 +1,4 @@
-Time Table
+TimeTable
 ===
 
 ## Develop
