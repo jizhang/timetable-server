@@ -1,25 +1,12 @@
-TimeTable
-===
+# TimeTable
 
-## Develop
+## Setup
 
-* Install [Project Lombok](https://projectlombok.org/).
-* Download source:
-
-```bash
-$ git clone git@github.com:jizhang/timetable
+```
+python -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+bin/start.sh
 ```
 
-* Import into Eclipse as Maven project.
-* Or run from command line:
-
-```bash
-$ mvn spring-boot:run
-```
-
-## Deploy
-
-```bash
-$ mvn package
-$ java -jar target/timetable.jar --server.port=8080 --spring.datasource.url=jdbc:h2:./timetable
-```
+Browse http://127.0.0.1:5000/
