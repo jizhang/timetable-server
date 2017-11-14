@@ -1,9 +1,16 @@
 # -*- coding: utf-8 -*-
 
-from flask import jsonify
-from timetable import app
+import datetime
+from flask import request, jsonify
+from timetable import app, db
+from timetable.models.note import Note
 
 
-@app.route('/note/save')
+@app.route('/note/save', methods=['POST'])
 def note_save():
-    return jsonify('ok')
+    note = Note()
+    note.content = request.form.get('content', '')
+    note.created = datetime.datetime.now()
+    db.session.add(note)
+    db.session.commit()
+    return jsonify('Saved {}'.format(note.created.strftime('%Y-%m-%d %H:%M:%S')))
