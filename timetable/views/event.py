@@ -31,6 +31,21 @@ def event_index():
                            note_content=note_content)
 
 
+@app.route('/event/ping', methods=['POST'])
+def event_ping():
+    return jsonify('pong')
+
+
+@app.route('/event/list')
+def event_list():
+    return jsonify([])
+
+
 @app.route('/event/save', methods=['POST'])
 def event_save():
+    return jsonify('ok')
+
+
+@app.route('/event/delete', methods=['POST'])
+def event_delete():
     return jsonify('ok')

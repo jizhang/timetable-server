@@ -3,7 +3,6 @@ var Event = function(opts) {
 	$.extend(self, opts);
 
 	$(function() {
-		self.initCsrf();
 		self.init();
 		self.initNote();
 		self.initPing();
@@ -13,18 +12,10 @@ var Event = function(opts) {
 Event.prototype = {
 	constructor: Event,
 
-	initCsrf: function() {
-		var token = $('meta[name="_csrf"]').attr('content');
-		var header = $('meta[name="_csrf_header"]').attr('content');
-		$(document).ajaxSend(function(e, xhr, options) {
-			xhr.setRequestHeader(header, token);
-		});
-	},
-
 	initPing: function() {
 		var self = this;
 		setInterval(function() {
-			$.post(self.contextPath + '/ping').fail(function() {
+			$.post(self.contextPath + '/event/ping').fail(function() {
 				if (confirm('Ping error, reload?')) {
 					window.location.reload();
 				}
