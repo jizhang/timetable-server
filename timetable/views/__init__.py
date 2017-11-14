@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import os
-from flask import make_response, redirect, url_for
+from functools import wraps
+from flask import make_response, session, abort, redirect, url_for, request
 from timetable import app
 
 
@@ -14,11 +15,18 @@ def handle_invalid_usage(error):
     return make_response(str(error), error.status_code)
 
 
-@app.route('/')
-def index():
-    return redirect(url_for('event_index'))
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if not session.get('timetable_user'):
+            return redirect(url_for('login', next=request.url))
+        elif session['timetable_user'] not in app.config['TIMETABLE_ADMIN']:
+            abort(403)
+        return f(*args, **kwargs)
+    return decorated_function
 
 
 # load views
+from timetable.views import index
 from timetable.views import event
 from timetable.views import note

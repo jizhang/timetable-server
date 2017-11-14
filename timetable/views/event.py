@@ -4,9 +4,9 @@ import os
 import re
 import time
 import datetime
-from flask import request, jsonify, render_template
-from timetable import app, db
-from timetable.views import InvalidUsage
+from flask import request, jsonify, render_template, session, abort
+from timetable import app, db, github
+from timetable.views import InvalidUsage, login_required
 from timetable.models.note import Note
 from timetable.models.event import Event
 
@@ -20,6 +20,7 @@ CATEGORIES = [
 
 
 @app.route('/event/index')
+@login_required
 def event_index():
     note = db.session.query(Note).\
         order_by(Note.id.desc()).\
@@ -35,11 +36,13 @@ def event_index():
 
 
 @app.route('/event/ping', methods=['POST'])
+@login_required
 def event_ping():
     return jsonify('pong')
 
 
 @app.route('/event/list')
+@login_required
 def event_list():
     try:
         start = datetime.datetime.strptime(request.args['start'], '%Y-%m-%d')
@@ -76,6 +79,7 @@ def get_category_color(category_id):
 
 
 @app.route('/event/save', methods=['POST'])
+@login_required
 def event_save():
     event = None
     event_id = request.form.get('id')
@@ -115,6 +119,7 @@ def event_save():
 
 
 @app.route('/event/delete', methods=['POST'])
+@login_required
 def event_delete():
     if not request.form.get('id'):
         raise InvalidUsage('id cannot be empty')
