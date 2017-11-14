@@ -1,7 +1,20 @@
+# Eclipse
 .project
-.classpath
-.buildpath
-.settings
-target
+.pydevproject
+.settings/
 
+# Python
+.py[cod]
+*.egg-info/
+__pycache__/
+venv/
+/application.cfg
+
+# Javascript
+timetable/static/components/
+
+# Database
 *.db
+
+# Misc
+.DS_Store
