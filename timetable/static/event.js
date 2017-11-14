@@ -3,7 +3,6 @@ var Event = function(opts) {
 	$.extend(self, opts);
 
 	$(function() {
-		self.initCsrf();
 		self.init();
 		self.initNote();
 		self.initPing();
@@ -13,18 +12,10 @@ var Event = function(opts) {
 Event.prototype = {
 	constructor: Event,
 
-	initCsrf: function() {
-		var token = $('meta[name="_csrf"]').attr('content');
-		var header = $('meta[name="_csrf_header"]').attr('content');
-		$(document).ajaxSend(function(e, xhr, options) {
-			xhr.setRequestHeader(header, token);
-		});
-	},
-
 	initPing: function() {
 		var self = this;
 		setInterval(function() {
-			$.post(self.contextPath + '/ping').fail(function() {
+			$.post(self.contextPath + '/event/ping').fail(function() {
 				if (confirm('Ping error, reload?')) {
 					window.location.reload();
 				}
@@ -130,14 +121,10 @@ Event.prototype = {
 							};
 
 							$.post(self.contextPath + '/event/delete', data, function(result) {
-								if (result.status != 'ok') {
-									alert(result.msg);
-									return;
-								}
 								$('#calendar').fullCalendar('removeEvents', event.id);
 								$('#dlgEvent').dialog('close');
-							}).fail(function() {
-								alert('Unkown error.');
+							}).fail(function(error) {
+								alert(error.responseText)
 							});
 
 						}
@@ -199,7 +186,7 @@ Event.prototype = {
 		};
 
 		return $.post(self.contextPath + '/note/save', data, function(result) {
-			$('#spnNote').text(result.msg);
+			$('#spnNote').text(result);
 		});
 	},
 
@@ -233,14 +220,9 @@ Event.prototype = {
 		};
 
 		$.post(self.contextPath + '/event/save', data, function(result) {
-			if (result.status != 'ok') {
-				alert(result.msg);
-				dfd.reject();
-				return;
-			}
 			dfd.resolve(result.id);
-		}).fail(function() {
-			alert('Unkown error.');
+		}).fail(function(error) {
+			alert(error.responseText)
 			dfd.reject();
 		});
 

@@ -1,0 +1,5 @@
+Flask==0.12.2
+Flask-SQLAlchemy==2.3.2
+Flask-OAuthlib==0.9.4
+
+-e .
