@@ -1,8 +1,3 @@
-# Eclipse
-.project
-.pydevproject
-.settings/
-
 # Python
 .py[cod]
 *.egg-info/
@@ -18,3 +13,4 @@ timetable/static/components/
 
 # Misc
 .DS_Store
+.vscode/
