@@ -1,15 +1,14 @@
-# -*- coding: utf-8 -*-
-
 import os
 import re
 import time
 import datetime
+
 from flask import request, jsonify, render_template, session, abort
-from timetable import app, db, github
-from timetable.views import InvalidUsage, login_required
+
+from timetable import app, db, auth
+from timetable.views import InvalidUsage
 from timetable.models.note import Note
 from timetable.models.event import Event
-
 
 CATEGORIES = [
     {'id': 1, 'title': 'Work', 'color': '#3a87ad'},
@@ -18,9 +17,8 @@ CATEGORIES = [
     {'id': 4, 'title': 'Goofing-around', 'color': 'black'}
 ]
 
-
 @app.route('/event/index')
-@login_required
+@auth.login_required
 def event_index():
     note = db.session.query(Note).\
         order_by(Note.id.desc()).\
@@ -34,15 +32,13 @@ def event_index():
                            categories=CATEGORIES,
                            note_content=note_content)
 
-
 @app.route('/event/ping', methods=['POST'])
-@login_required
+@auth.login_required
 def event_ping():
     return jsonify('pong')
 
-
 @app.route('/event/list')
-@login_required
+@auth.login_required
 def event_list():
     try:
         start = datetime.datetime.strptime(request.args['start'], '%Y-%m-%d')
@@ -70,16 +66,14 @@ def event_list():
 
     return jsonify(events)
 
-
 def get_category_color(category_id):
     for item in CATEGORIES:
         if item['id'] == category_id:
             return item['color']
     return ''
 
-
 @app.route('/event/save', methods=['POST'])
-@login_required
+@auth.login_required
 def event_save():
     event = None
     event_id = request.form.get('id')
@@ -117,9 +111,8 @@ def event_save():
 
     return jsonify({'id': event.id})
 
-
 @app.route('/event/delete', methods=['POST'])
-@login_required
+@auth.login_required
 def event_delete():
     if not request.form.get('id'):
         raise InvalidUsage('id cannot be empty')

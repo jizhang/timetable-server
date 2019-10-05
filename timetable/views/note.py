@@ -1,14 +1,12 @@
-# -*- coding: utf-8 -*-
-
 import datetime
+
 from flask import request, jsonify
-from timetable import app, db
-from timetable.views import login_required
+
+from timetable import app, db, auth
 from timetable.models.note import Note
 
-
 @app.route('/note/save', methods=['POST'])
-@login_required
+@auth.login_required
 def note_save():
     note = Note()
     note.content = request.form.get('content', '')

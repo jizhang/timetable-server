@@ -2,7 +2,6 @@ SECRET_KEY = 'secret key'
 
 SQLALCHEMY_DATABASE_URI = 'sqlite:///../timetable.db'
 
-GITHUB_CONSUMER_KEY = 'abcdaee6aeea2bdf7208'
-GITHUB_CONSUMER_SECRET = 'db4b1a7b6a1e57274475a02c07060a7944c68833'
-
-TIMETABLE_ADMIN = ['jizhang']
+USERS = {
+    'test': 'pbkdf2:sha256:150000$RQEmXgTI$39b2c288c2af0cc6380add124254364a910483acd0b8d1dc81260aa1649e99d5',
+}
