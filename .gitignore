@@ -11,6 +11,7 @@ timetable/static/components/
 
 # Database
 *.db
+backup/
 
 # Misc
 .DS_Store
