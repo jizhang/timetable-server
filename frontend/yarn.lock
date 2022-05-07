@@ -31,6 +31,14 @@
     "@fullcalendar/common" "~5.11.0"
     tslib "^2.1.0"
 
+"@fullcalendar/interaction@^5.11.0":
+  version "5.11.0"
+  resolved "https://registry.npmmirror.com/@fullcalendar/interaction/-/interaction-5.11.0.tgz#9cfb46cc5f75690394ef553d2c5cf4955782ff05"
+  integrity sha512-9XTI5+ydqrSX+IL3iWgKBURXfnPewn57Tmsv9mJZhiqrUEF7/+qtftLoKEAc8ZdWk/+01aBe67PFL16uPXj2Jg==
+  dependencies:
+    "@fullcalendar/common" "~5.11.0"
+    tslib "^2.1.0"
+
 "@fullcalendar/timegrid@^5.11.0":
   version "5.11.0"
   resolved "https://registry.npmmirror.com/@fullcalendar/timegrid/-/timegrid-5.11.0.tgz#b41153ef301f21f8c1e19a65023493c48c8bacf5"
