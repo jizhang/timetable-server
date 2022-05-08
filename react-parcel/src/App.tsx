@@ -1,10 +1,7 @@
-import Button from './components/Button'
+import Event from './views/Event'
 
-export default function App() {
+export default function() {
   return (
-    <>
-      <h1>Hello world!</h1>
-      <Button>Greeting</Button>
-    </>
+    <Event />
   )
 }
