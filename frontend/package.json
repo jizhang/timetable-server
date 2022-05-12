@@ -5,6 +5,7 @@
   "source": "src/index.html",
   "scripts": {
     "start": "concurrently parcel yarn:mock",
+    "start:local": "cross-env MOCK=none parcel",
     "mock": "nodemon --watch mock mock/index.js",
     "build": "parcel build",
     "typecheck": "tsc --noEmit"
@@ -13,10 +14,13 @@
     "@types/react": "^18.0.9",
     "@types/react-dom": "^18.0.3",
     "concurrently": "^7.1.0",
+    "cross-env": "^7.0.3",
     "express": "^4.18.1",
     "http-proxy-middleware": "^2.0.6",
     "nodemon": "^2.0.16",
     "parcel": "^2.5.0",
+    "routes": "^2.1.0",
+    "send-data": "^8.0.0",
     "typescript": "^4.6.4"
   },
   "dependencies": {

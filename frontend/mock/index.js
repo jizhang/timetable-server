@@ -1,11 +1,9 @@
-const express = require('express')
+const sendJson = require('send-data/json')
 
-const app = express()
+function ping(req, res) {
+  sendJson(req, res, 'pong')
+}
 
-app.get('/event/ping', (req, res) => {
-  res.json('pong')
-})
-
-const server = app.listen(8081, () => {
-  console.log('Mock server is listening on port ' + server.address().port)
-})
+module.exports = {
+  'GET /event/ping': ping,
+}
