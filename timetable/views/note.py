@@ -9,6 +9,24 @@ from timetable.models.note import Note
 @app.post('/note/save')
 @auth.login_required
 def note_save() -> Response:
+    """
+    ---
+    post:
+      summary: Save note.
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/NoteForm'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: string
+    """
     note = Note()
     note.content = request.form.get('content', '')
     note.created = datetime.datetime.now()
