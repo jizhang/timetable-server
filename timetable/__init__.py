@@ -1,3 +1,5 @@
+from typing import Any
+
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_httpauth import HTTPBasicAuth
@@ -7,7 +9,7 @@ app = Flask(__name__)
 app.config.from_object('timetable.default_settings')
 app.config.from_envvar('TIMETABLE_SETTINGS', silent=True)
 
-db = SQLAlchemy(app)
+db: Any = SQLAlchemy(app)
 auth = HTTPBasicAuth()
 
 
