@@ -1,9 +1,6 @@
-import os
-import re
-import time
 import datetime
 
-from flask import request, jsonify, render_template, session, abort
+from flask import request, jsonify, render_template
 
 from timetable import app, db, auth
 from timetable.views import InvalidUsage
@@ -16,6 +13,7 @@ CATEGORIES = [
     {'id': 3, 'title': 'Self-achievement', 'color': '#ff9c29'},
     {'id': 4, 'title': 'Goofing-around', 'color': 'black'}
 ]
+
 
 @app.route('/event/index')
 @auth.login_required
@@ -32,10 +30,12 @@ def event_index():
                            categories=CATEGORIES,
                            note_content=note_content)
 
+
 @app.route('/event/ping', methods=['POST'])
 @auth.login_required
 def event_ping():
     return jsonify('pong')
+
 
 @app.route('/event/list')
 @auth.login_required
@@ -66,11 +66,13 @@ def event_list():
 
     return jsonify(events)
 
+
 def get_category_color(category_id):
     for item in CATEGORIES:
         if item['id'] == category_id:
             return item['color']
     return ''
+
 
 @app.route('/event/save', methods=['POST'])
 @auth.login_required
@@ -110,6 +112,7 @@ def event_save():
     db.session.commit()
 
     return jsonify({'id': event.id})
+
 
 @app.route('/event/delete', methods=['POST'])
 @auth.login_required
