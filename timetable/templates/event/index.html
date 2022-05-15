@@ -23,12 +23,12 @@
 </div>
 
 <div id="divNote" style="position: absolute; left: 1024px; top: 10px;">
-<div style="font-size: 20px; font-weight: bold; line-height: 30px;">Note</div>
-<div><textarea style="width: 240px; height: 560px;" id="txtNote">{{note_content}}</textarea></div>
-<div style="float: right;">
-<input type="button" value="Save" id="btnNote" />
-</div>
-<span id="spnNote"></span>
+  <div style="font-size: 20px; font-weight: bold; line-height: 30px;">Note</div>
+  <div>
+    <textarea style="width: 240px; height: 560px;" id="txtNote">{{note_content}}</textarea>
+  </div>
+  <input type="button" value="Save" id="btnNote" />
+  <div id="spnNote"></div>
 </div>
 
 <script src="{{url_for('static', filename='components/jquery/dist/jquery.min.js')}}"></script>
@@ -38,8 +38,8 @@
 <script src="{{url_for('static', filename='event.js')}}"></script>
 <script type="text/javascript">
 new Event({
-	contextPath: '',
-	categories: {{categories|tojson}}
+  contextPath: '',
+  categories: {{categories|tojson}}
 });
 </script>
 </body>

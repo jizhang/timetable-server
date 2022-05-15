@@ -21,5 +21,10 @@ def verify_password(username, password):
     return False
 
 
+class AppError(Exception):
+    status_code = 400
+
+
 # pylint: disable=cyclic-import,wrong-import-position
 import timetable.views
+import timetable.commands.gen

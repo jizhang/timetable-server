@@ -1,19 +1,45 @@
-import datetime
+from datetime import datetime
 
-from flask import request, jsonify, Response
+from flask import request
+from marshmallow import ValidationError
 
-from timetable import app, db, auth
+from timetable import app, db, auth, AppError
 from timetable.models.note import Note
+from timetable.schemas.note import note_form_schema, note_schema
 
 
 @app.post('/note/save')
 @auth.login_required
-def note_save() -> Response:
-    note = Note()
-    note.content = request.form.get('content', '')
-    note.created = datetime.datetime.now()
+def save_note() -> dict:
+    """
+    ---
+    post:
+      summary: Save note.
+      tags: [note]
+      x-swagger-router-controller: timetable.views.note
+      operationId: save_note
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/NoteForm'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Note'
+    """
+    try:
+        note_form = note_form_schema.load(request.form)
+    except ValidationError as e:
+        raise AppError(e.messages)
+
+    note = Note(**note_form)
+    note.created = datetime.now()
     db.session.add(note)
     db.session.commit()
 
-    created = note.created.strftime('%Y-%m-%d %H:%M:%S')
-    return jsonify(f'Saved {created}')
+    return note_schema.dump(note)
