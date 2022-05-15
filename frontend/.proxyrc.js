@@ -1,5 +1,6 @@
 const { createProxyMiddleware } = require('http-proxy-middleware')
 const { createMockMiddleware } = require('./mock-middleware')
+const bodyParser = require('body-parser')
 
 module.exports = function (app) {
   if (process.env.MOCK === 'none') {
@@ -8,6 +9,8 @@ module.exports = function (app) {
     })
     app.use(proxy)
   } else {
+    app.use(bodyParser.urlencoded({ extended: false }))
+    app.use(bodyParser.json())
     app.use(createMockMiddleware('./mock'))
   }
 }

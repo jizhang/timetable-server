@@ -3,18 +3,13 @@ import { useEffect } from 'react'
 import FullCalendar from '@fullcalendar/react'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
+import { NoteApi } from '~/src/openapi'
 import * as styles from './Event.module.css'
-
-async function ping() {
-  const response = await fetch('/event/ping')
-  return await response.json()
-}
 
 export default function() {
   useEffect(() => {
-    ping().then(response => {
-      console.log(response)
-    })
+    const note = new NoteApi().saveNote({ content: 'test' })
+    console.log(note)
   }, [])
 
   return (

@@ -6,7 +6,7 @@ info:
   title: Timetable
   version: 0.1.0
 servers:
-- url: http://localhost:5001
+- url: http://localhost:1234
 paths:
   /note/save:
     post:
@@ -39,8 +39,8 @@ components:
     Note:
       type: object
       properties:
-        content:
-          type: string
         created:
           type: string
           format: date-time
+        content:
+          type: string

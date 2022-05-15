@@ -16,7 +16,7 @@ def gen():
         version='0.1.0',
         openapi_version='3.0.2',
         info={'description': 'What have you done today?'},
-        servers=[{'url': 'http://localhost:5001'}],
+        servers=[{'url': 'http://localhost:1234'}],
         plugins=[FlaskPlugin(), MarshmallowPlugin()]
     )
 
