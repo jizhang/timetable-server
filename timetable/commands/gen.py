@@ -6,23 +6,24 @@ from apispec_webframeworks.flask import FlaskPlugin
 
 from timetable import app
 from timetable.schemas.note import NoteFormSchema, NoteSchema
-from timetable.views.note import note_save
+from timetable.views.note import save_note
 
 
-@app.cli.command('spec')
-def generate_openapi_spec():
+@app.cli.command()
+def gen():
     spec = APISpec(
         title='Timetable',
         version='0.1.0',
         openapi_version='3.0.2',
         info={'description': 'What have you done today?'},
+        servers=[{'url': 'http://localhost:5001'}],
         plugins=[FlaskPlugin(), MarshmallowPlugin()]
     )
 
     spec.components.schema('NoteForm', schema=NoteFormSchema)
     spec.components.schema('Note', schema=NoteSchema)
 
-    spec.path(view=note_save)
+    spec.path(view=save_note)
 
     spec_path = Path(__file__).parent.joinpath('../../openapi.yaml').resolve()
     with open(spec_path, 'w') as f:

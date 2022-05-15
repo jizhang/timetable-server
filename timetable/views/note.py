@@ -10,11 +10,14 @@ from timetable.schemas.note import note_form_schema, note_schema
 
 @app.post('/note/save')
 @auth.login_required
-def note_save() -> dict:
+def save_note() -> dict:
     """
     ---
     post:
       summary: Save note.
+      tags: [note]
+      x-swagger-router-controller: timetable.views.note
+      operationId: save_note
       requestBody:
         required: true
         content:

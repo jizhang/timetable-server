@@ -5,10 +5,16 @@ info:
   description: What have you done today?
   title: Timetable
   version: 0.1.0
+servers:
+- url: http://localhost:5001
 paths:
   /note/save:
     post:
       summary: Save note.
+      tags:
+      - note
+      x-swagger-router-controller: timetable.views.note
+      operationId: save_note
       requestBody:
         required: true
         content:

@@ -27,4 +27,4 @@ class AppError(Exception):
 
 # pylint: disable=cyclic-import,wrong-import-position
 import timetable.views
-import timetable.commands.spec
+import timetable.commands.gen

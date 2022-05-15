@@ -10,6 +10,6 @@ def handle_app_error(error: AppError):
 
 
 # pylint: disable=cyclic-import,wrong-import-position
-from timetable.views import index
-from timetable.views import event
-from timetable.views import note
+import timetable.views.index
+import timetable.views.event
+import timetable.views.note

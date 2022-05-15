@@ -7,9 +7,11 @@
     "start": "parcel",
     "start:local": "cross-env MOCK=none parcel",
     "build": "parcel build",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "gen": "openapi-generator-cli generate"
   },
   "devDependencies": {
+    "@openapitools/openapi-generator-cli": "^2.5.1",
     "@types/react": "^18.0.9",
     "@types/react-dom": "^18.0.3",
     "chokidar": "^3.5.3",
