@@ -186,7 +186,7 @@ Event.prototype = {
 		};
 
 		return $.post(self.contextPath + '/note/save', data, function(result) {
-			$('#spnNote').text(result);
+			$('#spnNote').text(`Saved ${result.created}`);
 		});
 	},
 
