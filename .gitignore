@@ -4,6 +4,7 @@
 __pycache__/
 .mypy_cache/
 venv/
+.virtualenv/
 /application.cfg
 /timetable.log
 
