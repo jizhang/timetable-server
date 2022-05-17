@@ -10,10 +10,6 @@ What have you done today?
 /usr/local/opt/python@3.8/bin/python3 -m venv .virtualenv
 make dev
 make
-python -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
-bin/start.sh
 ```
 
 Browse http://127.0.0.1:5001/
@@ -21,6 +17,9 @@ Browse http://127.0.0.1:5001/
 ### Windows
 
 ```
-# TODO conda create
+C:\ProgramData\Anaconda3\Scripts\activate base
+conda create -n timetable python=3.8
+conda activate timetable
+pip install -r requirements.txt -r requirements-dev.txt
 bin\flask run
 ```
