@@ -18,6 +18,9 @@ import {
     Note,
     NoteFromJSON,
     NoteToJSON,
+    NoteForm,
+    NoteFormFromJSON,
+    NoteFormToJSON,
 } from '../models';
 
 export interface SaveNoteRequest {
@@ -28,6 +31,32 @@ export interface SaveNoteRequest {
  * 
  */
 export class NoteApi extends runtime.BaseAPI {
+
+    /**
+     * Get note content.
+     */
+    async getNoteContentRaw(initOverrides?: RequestInit): Promise<runtime.ApiResponse<NoteForm>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/note/content`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => NoteFormFromJSON(jsonValue));
+    }
+
+    /**
+     * Get note content.
+     */
+    async getNoteContent(initOverrides?: RequestInit): Promise<NoteForm> {
+        const response = await this.getNoteContentRaw(initOverrides);
+        return await response.value();
+    }
 
     /**
      * Save note.

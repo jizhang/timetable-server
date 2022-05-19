@@ -7,7 +7,7 @@
       "downloadUrl": "http://maven.aliyun.com/nexus/content/groups/public/${groupId}/${artifactId}/${versionName}/${artifactId}-${versionName}.jar"
     },
     "generators": {
-      "v3.0": {
+      "v1": {
         "inputSpec": "../openapi.yaml",
         "generatorName": "typescript-fetch",
         "output": "src/openapi"

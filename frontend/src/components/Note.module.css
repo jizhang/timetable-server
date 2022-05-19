@@ -1,0 +1,10 @@
+.title {
+  font-size: 20px;
+  font-weight: bold;
+  line-height: 30px;
+}
+
+.content {
+  width: 240px;
+  height: 560px;
+}

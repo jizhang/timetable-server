@@ -16,39 +16,32 @@ import { exists, mapValues } from '../runtime';
 /**
  * 
  * @export
- * @interface Note
+ * @interface NoteForm
  */
-export interface Note {
+export interface NoteForm {
     /**
      * 
      * @type {string}
-     * @memberof Note
+     * @memberof NoteForm
      */
     content?: string;
-    /**
-     * 
-     * @type {Date}
-     * @memberof Note
-     */
-    created?: Date;
 }
 
-export function NoteFromJSON(json: any): Note {
-    return NoteFromJSONTyped(json, false);
+export function NoteFormFromJSON(json: any): NoteForm {
+    return NoteFormFromJSONTyped(json, false);
 }
 
-export function NoteFromJSONTyped(json: any, ignoreDiscriminator: boolean): Note {
+export function NoteFormFromJSONTyped(json: any, ignoreDiscriminator: boolean): NoteForm {
     if ((json === undefined) || (json === null)) {
         return json;
     }
     return {
         
         'content': !exists(json, 'content') ? undefined : json['content'],
-        'created': !exists(json, 'created') ? undefined : (new Date(json['created'])),
     };
 }
 
-export function NoteToJSON(value?: Note | null): any {
+export function NoteFormToJSON(value?: NoteForm | null): any {
     if (value === undefined) {
         return undefined;
     }
@@ -58,7 +51,6 @@ export function NoteToJSON(value?: Note | null): any {
     return {
         
         'content': value.content,
-        'created': value.created === undefined ? undefined : (value.created.toISOString()),
     };
 }
 

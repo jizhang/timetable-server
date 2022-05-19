@@ -3,8 +3,8 @@ from apispec.ext.marshmallow import MarshmallowPlugin
 from apispec_webframeworks.flask import FlaskPlugin
 
 from timetable import app
+from timetable.views import note
 from timetable.schemas.note import NoteFormSchema, NoteSchema
-from timetable.views.note import save_note
 
 spec = APISpec(
     title='Timetable',
@@ -19,4 +19,5 @@ spec.components.schema('NoteForm', schema=NoteFormSchema)
 spec.components.schema('Note', schema=NoteSchema)
 
 with app.test_request_context():
-    spec.path(view=save_note)
+    spec.path(view=note.get_note_content)
+    spec.path(view=note.save_note)

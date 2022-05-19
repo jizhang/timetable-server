@@ -8,6 +8,20 @@ info:
 servers:
 - url: http://localhost:1234
 paths:
+  /note/content:
+    get:
+      summary: Get note content.
+      tags:
+      - note
+      x-swagger-router-controller: timetable.views.note
+      operationId: get_note_content
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NoteForm'
   /note/save:
     post:
       summary: Save note.
@@ -39,8 +53,8 @@ components:
     Note:
       type: object
       properties:
+        content:
+          type: string
         created:
           type: string
           format: date-time
-        content:
-          type: string

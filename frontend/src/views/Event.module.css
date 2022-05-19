@@ -5,3 +5,9 @@
 .calendar tr {
   height: 30px;
 }
+
+.note {
+  position: absolute;
+  left: 1024px;
+  top: 10px;
+}
