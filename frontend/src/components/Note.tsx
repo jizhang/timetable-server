@@ -1,21 +1,17 @@
 import * as dayjs from 'dayjs'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
+import { useQuery } from 'react-query'
 import { NoteApi } from '~/src/openapi'
 import * as styles from './Note.module.css'
 
+const noteApi = new NoteApi()
 let saveHandler
 
 export default function() {
-  const noteApi = new NoteApi()
-
-  const [content, setContent] = useState('')
+  const [content, setContent] = useState<string | null>(null)
   const [created, setCreated] = useState('')
 
-  useEffect(() => {
-    noteApi.getNoteContent().then(response => {
-      setContent(response.content)
-    })
-  }, [])
+  const { data } = useQuery('note', () => noteApi.getNoteContent())
 
   function handleChangeContent(event) {
     setContent(event.target.value)
@@ -36,7 +32,7 @@ export default function() {
     <>
       <div className={styles.title}>Note</div>
       <div>
-        <textarea className={styles.content} value={content} onChange={handleChangeContent} />
+        <textarea className={styles.content} value={content ?? data?.content} onChange={handleChangeContent} />
       </div>
       <input type="button" value="Save" onClick={handleSaveContent} />
       {created && (
