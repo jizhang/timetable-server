@@ -3,8 +3,11 @@ import { useState, useEffect } from 'react'
 import { NoteApi } from '~/src/openapi'
 import * as styles from './Note.module.css'
 
+let saveHandler
+
 export default function() {
   const noteApi = new NoteApi()
+
   const [content, setContent] = useState('')
   const [created, setCreated] = useState('')
 
@@ -16,9 +19,14 @@ export default function() {
 
   function handleChangeContent(event) {
     setContent(event.target.value)
+    clearTimeout(saveHandler)
+    saveHandler = setTimeout(() => {
+      handleSaveContent()
+    }, 5000)
   }
 
   function handleSaveContent() {
+    clearTimeout(saveHandler)
     noteApi.saveNote({ content }).then(response => {
       setCreated(dayjs(response.created).format('YYYY-MM-DD HH:mm:ss'))
     })

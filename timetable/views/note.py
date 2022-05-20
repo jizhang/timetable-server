@@ -1,5 +1,3 @@
-from datetime import datetime
-
 from flask import request
 from marshmallow import ValidationError
 
@@ -61,8 +59,7 @@ def save_note() -> dict:
         raise AppError(e.messages)
 
     note = Note(**note_form)
-    note.created = datetime.now()
-    db.session.add(note)
+    note_service.save(note)
     db.session.commit()
 
     return note_schema.dump(note)
