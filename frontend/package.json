@@ -7,9 +7,20 @@
     "start": "parcel",
     "start:local": "cross-env MOCK=none parcel",
     "build": "parcel build",
+    "prepare": "is-ci || (cd .. && husky install frontend/.husky)",
     "lint": "eslint --ext .js,.ts,.tsx --fix . && prettier --write .",
+    "lint:ci": "eslint --ext .js,.ts,.tsx . && prettier --check .",
     "typecheck": "tsc --noEmit",
     "gen": "openapi-generator-cli generate"
+  },
+  "lint-staged": {
+    "*.{js,ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{html,css,json,md}": [
+      "prettier --write"
+    ]
   },
   "dependencies": {
     "@fullcalendar/interaction": "^5.11.0",
@@ -34,6 +45,9 @@
     "eslint-config-prettier": "^8.5.0",
     "glob": "^8.0.2",
     "http-proxy-middleware": "^2.0.6",
+    "husky": "^7.0.4",
+    "is-ci": "^3.0.1",
+    "lint-staged": "^12.4.1",
     "parcel": "^2.5.0",
     "prettier": "^2.6.2",
     "routes": "^2.1.0",
