@@ -8,21 +8,8 @@
     "start:local": "cross-env MOCK=none parcel",
     "build": "parcel build",
     "typecheck": "tsc --noEmit",
-    "gen": "openapi-generator-cli generate"
-  },
-  "devDependencies": {
-    "@openapitools/openapi-generator-cli": "^2.5.1",
-    "@types/react": "^18.0.9",
-    "@types/react-dom": "^18.0.3",
-    "body-parser": "^1.20.0",
-    "chokidar": "^3.5.3",
-    "cross-env": "^7.0.3",
-    "glob": "^8.0.2",
-    "http-proxy-middleware": "^2.0.6",
-    "parcel": "^2.5.0",
-    "routes": "^2.1.0",
-    "send-data": "^8.0.0",
-    "typescript": "^4.6.4"
+    "gen": "openapi-generator-cli generate",
+    "lint": "eslint . --ext .js,.ts,.tsx"
   },
   "dependencies": {
     "@fullcalendar/interaction": "^5.11.0",
@@ -33,5 +20,22 @@
     "react-dom": "^18.1.0",
     "react-hook-form": "^7.31.2",
     "react-query": "^3.39.0"
+  },
+  "devDependencies": {
+    "@openapitools/openapi-generator-cli": "^2.5.1",
+    "@types/react": "^18.0.9",
+    "@types/react-dom": "^18.0.3",
+    "@typescript-eslint/eslint-plugin": "^5.25.0",
+    "@typescript-eslint/parser": "^5.25.0",
+    "body-parser": "^1.20.0",
+    "chokidar": "^3.5.3",
+    "cross-env": "^7.0.3",
+    "eslint": "^8.16.0",
+    "glob": "^8.0.2",
+    "http-proxy-middleware": "^2.0.6",
+    "parcel": "^2.5.0",
+    "routes": "^2.1.0",
+    "send-data": "^8.0.0",
+    "typescript": "^4.6.4"
   }
 }
