@@ -8,21 +8,18 @@ import * as styles from './Note.module.css'
 const noteApi = new NoteApi()
 let saveHandler
 
-export default function() {
+export default function () {
   const [created, setCreated] = useState('')
 
   const { data } = useQuery('note', () => noteApi.getNoteContent(), {
     initialData: { content: '' },
   })
 
-  const { mutate, isLoading } = useMutation(
-    (values: SaveNoteRequest) => noteApi.saveNote(values),
-    {
-      onSuccess: (data) => {
-        setCreated(dayjs(data.created).format('YYYY-MM-DD HH:mm:ss'))
-      },
-    }
-  )
+  const { mutate, isLoading } = useMutation((values: SaveNoteRequest) => noteApi.saveNote(values), {
+    onSuccess: (data) => {
+      setCreated(dayjs(data.created).format('YYYY-MM-DD HH:mm:ss'))
+    },
+  })
 
   const { register, handleSubmit } = useForm()
 

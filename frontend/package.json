@@ -7,9 +7,9 @@
     "start": "parcel",
     "start:local": "cross-env MOCK=none parcel",
     "build": "parcel build",
+    "lint": "eslint --ext .js,.ts,.tsx --fix . && prettier --write .",
     "typecheck": "tsc --noEmit",
-    "gen": "openapi-generator-cli generate",
-    "lint": "eslint . --ext .js,.ts,.tsx"
+    "gen": "openapi-generator-cli generate"
   },
   "dependencies": {
     "@fullcalendar/interaction": "^5.11.0",
@@ -31,9 +31,11 @@
     "chokidar": "^3.5.3",
     "cross-env": "^7.0.3",
     "eslint": "^8.16.0",
+    "eslint-config-prettier": "^8.5.0",
     "glob": "^8.0.2",
     "http-proxy-middleware": "^2.0.6",
     "parcel": "^2.5.0",
+    "prettier": "^2.6.2",
     "routes": "^2.1.0",
     "send-data": "^8.0.0",
     "typescript": "^4.6.4"
