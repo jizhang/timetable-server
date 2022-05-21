@@ -16,9 +16,7 @@ export default function() {
   })
 
   const { mutate, isLoading } = useMutation(
-    (values: SaveNoteRequest) => {
-      return noteApi.saveNote(values)
-    },
+    (values: SaveNoteRequest) => noteApi.saveNote(values),
     {
       onSuccess: (data) => {
         setCreated(dayjs(data.created).format('YYYY-MM-DD HH:mm:ss'))
@@ -28,7 +26,7 @@ export default function() {
 
   const { register, handleSubmit } = useForm()
 
-  function handleChangeContent(event) {
+  function handleChangeContent() {
     clearTimeout(saveHandler)
     saveHandler = setTimeout(() => {
       handleSubmit(handleSaveContent)()
@@ -53,9 +51,7 @@ export default function() {
       <div>
         <input type="submit" value="Save" disabled={isLoading} />
       </div>
-      {created && (
-        <div>Saved {created}</div>
-      )}
+      {created && <div>Saved {created}</div>}
     </form>
   )
 }
