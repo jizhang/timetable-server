@@ -1,24 +1,30 @@
 module.exports = {
-  parser: '@typescript-eslint/parser',
-  plugins: ['@typescript-eslint'],
-  extends: [
-    'standard',
-    'plugin:@typescript-eslint/recommended',
-    'plugin:react/recommended',
-    'plugin:react/jsx-runtime',
-    'plugin:react-hooks/recommended',
-    'prettier',
-  ],
-  settings: {
-    react: {
-      version: 'detect',
-    },
-  },
+  extends: ['standard', 'prettier'],
   overrides: [
     {
-      files: ['mock/**/*.js', 'mock-middleware/*.js'],
+      extends: [
+        'standard',
+        'plugin:@typescript-eslint/recommended',
+        'plugin:@typescript-eslint/recommended-requiring-type-checking',
+        'plugin:react/recommended',
+        'plugin:react/jsx-runtime',
+        'plugin:react-hooks/recommended',
+        'prettier',
+      ],
+      files: ['**/*.ts?(x)'],
+      parser: '@typescript-eslint/parser',
+      parserOptions: {
+        tsconfigRootDir: __dirname,
+        project: ['./tsconfig.json'],
+      },
+      plugins: ['@typescript-eslint'],
       rules: {
-        '@typescript-eslint/no-var-requires': 'off',
+        '@typescript-eslint/no-misused-promises': ['error', { checksVoidReturn: false }],
+      },
+      settings: {
+        react: {
+          version: 'detect',
+        },
       },
     },
   ],

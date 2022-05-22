@@ -2,20 +2,17 @@ import * as dayjs from 'dayjs'
 import { useState } from 'react'
 import { useQuery, useMutation } from 'react-query'
 import { useForm } from 'react-hook-form'
-import { NoteApi, type SaveNoteRequest } from '~/src/openapi'
+import { NoteApi, type NoteForm } from '~/src/openapi'
 import * as styles from './Note.module.css'
 
 const noteApi = new NoteApi()
-let saveHandler
+let saveHandler: NodeJS.Timeout
 
 export default function Note() {
   const [created, setCreated] = useState('')
 
-  const { data } = useQuery('note', () => noteApi.getNoteContent(), {
-    initialData: { content: '' },
-  })
-
-  const { mutate, isLoading } = useMutation((values: SaveNoteRequest) => noteApi.saveNote(values), {
+  const { data } = useQuery('note', () => noteApi.getNoteContent())
+  const { mutate, isLoading } = useMutation((values: NoteForm) => noteApi.saveNote(values), {
     onSuccess: (data) => {
       setCreated(dayjs(data.created).format('YYYY-MM-DD HH:mm:ss'))
     },
@@ -26,11 +23,13 @@ export default function Note() {
   function handleChangeContent() {
     clearTimeout(saveHandler)
     saveHandler = setTimeout(() => {
-      handleSubmit(handleSaveContent)()
+      handleSubmit(handleSaveContent)().catch((error) => {
+        alert(`Unexpected error ${String(error)}`)
+      })
     }, 5000)
   }
 
-  function handleSaveContent(values) {
+  function handleSaveContent(values: NoteForm) {
     clearTimeout(saveHandler)
     mutate(values)
   }
@@ -42,7 +41,7 @@ export default function Note() {
         <textarea
           {...register('content', { onChange: handleChangeContent })}
           className={styles.content}
-          defaultValue={data.content}
+          defaultValue={data?.content}
         />
       </div>
       <div>

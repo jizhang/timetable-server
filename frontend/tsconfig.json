@@ -1,9 +1,13 @@
 {
   "compilerOptions": {
-    "jsx": "preserve",
     "baseUrl": ".",
+    "jsx": "preserve",
+    "moduleResolution": "node",
     "paths": {
       "~*": ["./*"]
-    }
+    },
+    "skipLibCheck": true,
+    "strict": true,
+    "target": "esnext"
   }
 }
