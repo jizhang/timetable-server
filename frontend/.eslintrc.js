@@ -1,14 +1,22 @@
 module.exports = {
-  root: true,
   parser: '@typescript-eslint/parser',
   plugins: ['@typescript-eslint'],
-  extends: ['eslint:recommended', 'plugin:@typescript-eslint/recommended', 'prettier'],
+  extends: [
+    'standard',
+    'plugin:@typescript-eslint/recommended',
+    'plugin:react/recommended',
+    'plugin:react/jsx-runtime',
+    'plugin:react-hooks/recommended',
+    'prettier',
+  ],
+  settings: {
+    react: {
+      version: 'detect',
+    },
+  },
   overrides: [
     {
-      files: ['*.js'],
-      env: {
-        node: true,
-      },
+      files: ['mock/**/*.js', 'mock-middleware/*.js'],
       rules: {
         '@typescript-eslint/no-var-requires': 'off',
       },

@@ -8,7 +8,7 @@ import * as styles from './Note.module.css'
 const noteApi = new NoteApi()
 let saveHandler
 
-export default function () {
+export default function Note() {
   const [created, setCreated] = useState('')
 
   const { data } = useQuery('note', () => noteApi.getNoteContent(), {

@@ -4,7 +4,7 @@ import interactionPlugin from '@fullcalendar/interaction'
 import Note from '~/src/components/Note'
 import * as styles from './Event.module.css'
 
-export default function () {
+export default function Event() {
   return (
     <div>
       <div className={styles.calendar}>
