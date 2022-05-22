@@ -13,6 +13,7 @@
     "@fullcalendar/interaction": "^5.11.0",
     "@fullcalendar/timegrid": "^5.11.0",
     "@fullcalendar/vue3": "^5.11.0",
+    "dayjs": "^1.11.2",
     "vue": "^3.2.25"
   },
   "devDependencies": {

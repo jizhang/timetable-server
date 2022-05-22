@@ -6,9 +6,9 @@ info:
   title: Timetable
   version: 0.1.0
 servers:
-- url: http://localhost:1234
+- url: http://localhost:3000
 paths:
-  /note/content:
+  /api/note/content:
     get:
       summary: Get note content.
       tags:
@@ -22,7 +22,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/NoteForm'
-  /note/save:
+  /api/note/save:
     post:
       summary: Save note.
       tags:
@@ -53,8 +53,8 @@ components:
     Note:
       type: object
       properties:
-        content:
-          type: string
         created:
           type: string
           format: date-time
+        content:
+          type: string

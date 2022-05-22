@@ -11,7 +11,7 @@ spec = APISpec(
     version='0.1.0',
     openapi_version='3.0.2',
     info={'description': 'What have you done today?'},
-    servers=[{'url': 'http://localhost:1234'}],
+    servers=[{'url': 'http://localhost:3000'}],
     plugins=[FlaskPlugin(), MarshmallowPlugin()]
 )
 

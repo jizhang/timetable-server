@@ -7,7 +7,7 @@ from timetable.services import note as note_service
 from timetable.schemas.note import note_form_schema, note_schema
 
 
-@app.get('/note/content')
+@app.get('/api/note/content')
 @auth.login_required
 def get_note_content() -> dict:
     """
@@ -29,7 +29,7 @@ def get_note_content() -> dict:
     return note_form_schema.dump({'content': content})
 
 
-@app.post('/note/save')
+@app.post('/api/note/save')
 @auth.login_required
 def save_note() -> dict:
     """
