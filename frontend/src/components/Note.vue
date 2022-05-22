@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, reactive } from 'vue'
+import { ref, reactive, onMounted } from 'vue'
 import dayjs from 'dayjs'
 import { NoteApi } from '@/openapi'
 
@@ -11,8 +11,28 @@ const form = reactive({
   content: '',
 })
 
-function handleSubmit(event) {
+onMounted(() => {
+  noteApi.getNoteContent().then((response) => {
+    form.content = response.content || ''
+  })
+})
+
+let saveHandler: NodeJS.Timeout
+
+function handleChangeContent() {
+  clearTimeout(saveHandler)
+  saveHandler = setTimeout(() => {
+    saveNote()
+  }, 5000)
+}
+
+function handleSubmit(event: Event) {
   event.preventDefault()
+  clearTimeout(saveHandler)
+  saveNote()
+}
+
+function saveNote() {
   noteApi.saveNote(form).then((response) => {
     created.value = dayjs(response.created).format('YYYY-MM-DD HH:mm:ss')
   })
@@ -23,7 +43,7 @@ function handleSubmit(event) {
   <form @submit="handleSubmit">
     <div class="title">Note</div>
     <div>
-      <textarea class="content" v-model="form.content"></textarea>
+      <textarea class="content" v-model="form.content" @input="handleChangeContent"></textarea>
     </div>
     <div>
       <input type="submit" value="Save" :disabled="isLoading" />
