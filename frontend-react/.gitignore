@@ -1,8 +1,0 @@
-# JavaScript
-node_modules/
-dist/
-.parcel-cache/
-
-# Misc
-.DS_Store
-.vscode/
