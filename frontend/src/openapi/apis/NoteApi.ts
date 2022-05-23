@@ -41,7 +41,7 @@ export class NoteApi extends runtime.BaseAPI {
         const headerParameters: runtime.HTTPHeaders = {};
 
         const response = await this.request({
-            path: `/note/content`,
+            path: `/api/note/content`,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -85,7 +85,7 @@ export class NoteApi extends runtime.BaseAPI {
         }
 
         const response = await this.request({
-            path: `/note/save`,
+            path: `/api/note/save`,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,

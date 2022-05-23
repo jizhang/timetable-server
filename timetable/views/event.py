@@ -1,10 +1,9 @@
 import datetime
 
-from flask import request, jsonify, render_template
+from flask import request, jsonify
 
 from timetable import app, db, auth
 from timetable.views import InvalidUsage
-from timetable.models.note import Note
 from timetable.models.event import Event
 
 CATEGORIES = [
@@ -15,29 +14,13 @@ CATEGORIES = [
 ]
 
 
-@app.route('/event/index')
-@auth.login_required
-def event_index():
-    note = db.session.query(Note).\
-        order_by(Note.id.desc()).\
-        first()
-    if note is None:
-        note_content = ''
-    else:
-        note_content = note.content
-
-    return render_template('event/index.html',
-                           categories=CATEGORIES,
-                           note_content=note_content)
-
-
-@app.route('/event/ping', methods=['POST'])
+@app.post('/api/event/ping')
 @auth.login_required
 def event_ping():
     return jsonify('pong')
 
 
-@app.route('/event/list')
+@app.get('/api/event/list')
 @auth.login_required
 def event_list():
     try:
@@ -74,7 +57,7 @@ def get_category_color(category_id):
     return ''
 
 
-@app.route('/event/save', methods=['POST'])
+@app.post('/api/event/save')
 @auth.login_required
 def event_save():
     event = None
@@ -114,7 +97,7 @@ def event_save():
     return jsonify({'id': event.id})
 
 
-@app.route('/event/delete', methods=['POST'])
+@app.post('/api/event/delete')
 @auth.login_required
 def event_delete():
     if not request.form.get('id'):

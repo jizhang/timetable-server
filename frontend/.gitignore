@@ -1,7 +1,7 @@
 # JavaScript
 node_modules/
 dist/
-.parcel-cache/
+*.local
 
 # Misc
 .DS_Store
