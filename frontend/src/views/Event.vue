@@ -7,6 +7,7 @@ import Note from '@/components/Note.vue'
 
 const options = {
   allDaySlot: false,
+  events: '/api/event/list',
   firstDay: 1,
   nowIndicator: true,
   plugins: [timeGridPlugin, interactionPlugin],
