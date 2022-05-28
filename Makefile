@@ -1,14 +1,14 @@
 default: web
 
 dev:
-	./ve pip install -r requirements.txt -r requirements-dev.txt
+	pip install -r requirements.txt -r requirements-dev.txt
 
 web:
-	FLASK_APP=timetable FLASK_ENV=development ./ve flask run --port=5001
+	flask run
 
 gen:
-	FLASK_APP=timetable ./ve flask gen
+	flask gen
 
 test:
-	./ve pylint timetable
-	./ve mypy timetable
+	pylint timetable
+	mypy timetable

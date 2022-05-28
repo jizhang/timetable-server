@@ -1,20 +1,20 @@
 # Python
-.py[cod]
-*.egg-info/
-__pycache__/
-.mypy_cache/
-venv/
-.virtualenv/
-/application.cfg
-/timetable.log
+*.egg-info
+__pycache__
+.mypy_cache
+venv
+application.cfg
+timetable.log
 
 # Javascript
 timetable/static/components/
 
 # Database
 *.db
-/backup
+backup
 
-# Misc
+# IDE
+.vscode
+
+# Mac
 .DS_Store
-.vscode/
