@@ -1,18 +1,36 @@
 <script setup lang="ts">
 import '@fullcalendar/core/vdom'
-import FullCalendar from '@fullcalendar/vue3'
+import FullCalendar, { CalendarOptions } from '@fullcalendar/vue3'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import Note from '@/components/Note.vue'
 
-const options = {
+const options: CalendarOptions = {
   allDaySlot: false,
+  editable: true,
   events: '/api/event/list',
   firstDay: 1,
   nowIndicator: true,
   plugins: [timeGridPlugin, interactionPlugin],
   scrollTime: '08:00:00',
   selectable: true,
+  selectOverlap: false,
+
+  select({ start, end }) {
+    console.log(start, end)
+  },
+
+  eventClick({ event }) {
+    console.log(event.title)
+  },
+
+  eventDrop({ event, revert }) {
+    console.log(event.title, event.start)
+  },
+
+  eventResize({ event, revert }) {
+    console.log(event.title, event.end)
+  },
 }
 </script>
 
