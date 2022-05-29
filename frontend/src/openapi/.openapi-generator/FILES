@@ -1,7 +1,9 @@
-.openapi-generator-ignore
+apis/EventApi.ts
 apis/NoteApi.ts
 apis/index.ts
 index.ts
+models/Category.ts
+models/InlineResponse200.ts
 models/Note.ts
 models/NoteForm.ts
 models/index.ts

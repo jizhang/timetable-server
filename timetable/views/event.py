@@ -1,10 +1,12 @@
 import datetime
 
-from flask import request, jsonify
+from flask import request, jsonify, Response
 
 from timetable import app, db, auth
-from timetable.views import InvalidUsage
 from timetable.models.event import Event
+from timetable.views import InvalidUsage
+from timetable.schemas.event import categories_schema
+
 
 CATEGORIES = [
     {'id': 1, 'title': 'Work', 'color': '#3a87ad'},
@@ -12,6 +14,32 @@ CATEGORIES = [
     {'id': 3, 'title': 'Self-achievement', 'color': '#ff9c29'},
     {'id': 4, 'title': 'Goofing-around', 'color': 'black'}
 ]
+
+
+@app.get('/api/event/categories')
+@auth.login_required
+def get_event_categories() -> Response:
+    """
+    ---
+    get:
+      summary: Get event categories.
+      tags: [event]
+      x-swagger-router-controller: timetable.views.event
+      operationId: get_event_categories
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  categories:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/Category'
+    """
+    return jsonify(categories=categories_schema.dump(CATEGORIES))
 
 
 @app.post('/api/event/ping')
