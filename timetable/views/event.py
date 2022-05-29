@@ -1,19 +1,15 @@
 import datetime
 
 from flask import request, jsonify, Response
+from marshmallow import ValidationError
 
-from timetable import app, db, auth
+from timetable import app, db, auth, AppError
+from timetable.consts import CATEGORIES
 from timetable.models.event import Event
+from timetable.services import event as event_svc
 from timetable.views import InvalidUsage
-from timetable.schemas.event import categories_schema
+from timetable.schemas.event import categories_schema, event_schema
 
-
-CATEGORIES = [
-    {'id': 1, 'title': 'Work', 'color': '#3a87ad'},
-    {'id': 2, 'title': 'Meeting', 'color': 'gray'},
-    {'id': 3, 'title': 'Self-achievement', 'color': '#ff9c29'},
-    {'id': 4, 'title': 'Goofing-around', 'color': 'black'}
-]
 
 
 @app.get('/api/event/categories')
@@ -87,39 +83,38 @@ def get_category_color(category_id):
 
 @app.post('/api/event/save')
 @auth.login_required
-def event_save():
-    event = None
-    event_id = request.form.get('id')
-    if event_id:
-        event = db.session.query(Event).get(event_id)
-    if event is None:
-        event = Event()
-        event.created = datetime.datetime.now()
-        db.session.add(event)
-
-    title = request.form.get('title', '').strip()
-    if not title:
-        raise InvalidUsage('title cannot be empty')
-
+def save_event():
+    """
+    ---
+    post:
+      summary: Save event.
+      tags: [event]
+      x-swagger-router-controller: timetable.views.event
+      operationId: save_event
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Event'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+    """
     try:
-        category_id = int(request.form['categoryId'])
-    except Exception:
-        raise InvalidUsage('invalid categoryId')
+        event_form = event_schema.load(request.form)
+    except ValidationError as e:
+        raise AppError(e.messages)
 
-    try:
-        start = datetime.datetime.strptime(request.form['start'], '%Y-%m-%d %H:%M:%S')
-        end = datetime.datetime.strptime(request.form['end'], '%Y-%m-%d %H:%M:%S')
-        if end < start:
-            raise ValueError()
-    except Exception:
-        raise InvalidUsage('invalid start / end')
-
-    event.title = title
-    event.category_id = category_id
-    event.start = start
-    event.end = end
-    event.updated = datetime.datetime.now()
-    db.session.add(event)
+    event = Event(**event_form)
+    event_svc.save(event)
     db.session.commit()
 
     return jsonify({'id': event.id})
@@ -127,12 +122,14 @@ def event_save():
 
 @app.post('/api/event/delete')
 @auth.login_required
-def event_delete():
+def event_delete() -> Response:
     if not request.form.get('id'):
-        raise InvalidUsage('id cannot be empty')
+        raise AppError('ID cannot be empty.')
+
     row = db.session.query(Event).get(request.form['id'])
     if row is None:
-        raise InvalidUsage('event not found')
+        raise AppError('Event not found.')
+
     db.session.delete(row)
     db.session.commit()
     return jsonify('ok')
