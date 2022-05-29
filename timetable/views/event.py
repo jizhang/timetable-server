@@ -37,7 +37,7 @@ def get_event_categories() -> Response:
                   categories:
                     type: array
                     items:
-                        $ref: '#/components/schemas/Category'
+                      $ref: '#/components/schemas/Category'
     """
     return jsonify(categories=categories_schema.dump(CATEGORIES))
 

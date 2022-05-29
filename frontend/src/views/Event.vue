@@ -1,12 +1,16 @@
 <script setup lang="ts">
+import dayjs from 'dayjs'
 import { ref, reactive, onMounted } from 'vue'
 import { Modal } from 'bootstrap'
 import '@fullcalendar/core/vdom'
 import FullCalendar, { CalendarOptions } from '@fullcalendar/vue3'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
+import { type EventApi as CalendarEvent } from '@fullcalendar/core'
 import Note from '@/components/Note.vue'
 import { EventApi, type Category } from '@/openapi'
+
+const formatDate = (date: Date) => dayjs(date).format('YYYY-MM-DD HH:mm:ss')
 
 const eventApi = new EventApi()
 
@@ -19,9 +23,16 @@ onMounted(() => {
   })
 })
 
-const eventForm = reactive({
+const defaultEventForm = {
+  id: 0,
   categoryId: 1,
   title: '',
+  start: '',
+  end: '',
+}
+
+const eventForm = reactive({
+  ...defaultEventForm,
 })
 
 const categories = ref<Category[]>([])
@@ -33,8 +44,18 @@ onMounted(() => {
 })
 
 function saveEvent() {
-  console.log('save')
+  console.log(eventForm)
   modal.hide()
+}
+
+function updateEventForm(event: CalendarEvent) {
+  Object.assign(eventForm, {
+    id: event.id,
+    categoryId: event.extendedProps.categoryId,
+    title: event.title,
+    start: formatDate(event.start!),
+    end: formatDate(event.end!),
+  })
 }
 
 const options: CalendarOptions = {
@@ -49,20 +70,27 @@ const options: CalendarOptions = {
   selectOverlap: false,
 
   select({ start, end }) {
-    console.log(start, end)
+    Object.assign(eventForm, {
+      ...defaultEventForm,
+      start: formatDate(start),
+      end: formatDate(end),
+    })
     modal.show()
   },
 
   eventClick({ event }) {
-    console.log(event.title)
+    updateEventForm(event)
+    modal.show()
   },
 
   eventDrop({ event, revert }) {
-    console.log(event.title, event.start)
+    updateEventForm(event)
+    saveEvent()
   },
 
   eventResize({ event, revert }) {
-    console.log(event.title, event.end)
+    updateEventForm(event)
+    saveEvent()
   },
 }
 </script>
@@ -81,21 +109,22 @@ const options: CalendarOptions = {
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title">New/Edit Event</h5>
+            <h5 class="modal-title">{{ eventForm.id ? 'Edit' : 'New' }} Event</h5>
           </div>
           <div class="modal-body">
             <form>
-              <div class="mb-3">
-                <label class="col-form-label">Category:</label>
-                <select class="form-select" v-model="eventForm.categoryId">
-                  <option v-for="category in categories" :key="category.id" :value="category.id">
-                    {{ category.title }}
-                  </option>
-                </select>
+              <div class="row mb-3">
+                <label class="col-sm-2 col-form-label">Category:</label>
+                <div class="col-sm-10">
+                  <select class="form-select" v-model="eventForm.categoryId">
+                    <option v-for="category in categories" :key="category.id" :value="category.id">
+                      {{ category.title }}
+                    </option>
+                  </select>
+                </div>
               </div>
               <div class="mb-3">
-                <label class="col-form-label">Message:</label>
-                <textarea class="form-control"></textarea>
+                <textarea class="form-control" :rows="5" v-model="eventForm.title"></textarea>
               </div>
             </form>
           </div>
