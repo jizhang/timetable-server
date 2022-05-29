@@ -1,21 +1,35 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, reactive, onMounted } from 'vue'
 import { Modal } from 'bootstrap'
 import '@fullcalendar/core/vdom'
 import FullCalendar, { CalendarOptions } from '@fullcalendar/vue3'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import Note from '@/components/Note.vue'
+import { EventApi, type Category } from '@/openapi'
+
+const eventApi = new EventApi()
 
 const modalRef = ref<HTMLElement | null>(null)
 let modal: Modal
 
 onMounted(() => {
-  if (modalRef.value !== null) {
-    modal = new Modal(modalRef.value, {
-      backdrop: 'static',
-    })
-  }
+  modal = new Modal(modalRef.value!, {
+    backdrop: 'static',
+  })
+})
+
+const eventForm = reactive({
+  categoryId: 1,
+  title: '',
+})
+
+const categories = ref<Category[]>([])
+
+onMounted(() => {
+  eventApi.getEventCategories().then((response) => {
+    categories.value = response.categories || []
+  })
 })
 
 function saveEvent() {
@@ -70,7 +84,20 @@ const options: CalendarOptions = {
             <h5 class="modal-title">New/Edit Event</h5>
           </div>
           <div class="modal-body">
-            ...
+            <form>
+              <div class="mb-3">
+                <label class="col-form-label">Category:</label>
+                <select class="form-select" v-model="eventForm.categoryId">
+                  <option v-for="category in categories" :key="category.id" :value="category.id">
+                    {{ category.title }}
+                  </option>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label class="col-form-label">Message:</label>
+                <textarea class="form-control"></textarea>
+              </div>
+            </form>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

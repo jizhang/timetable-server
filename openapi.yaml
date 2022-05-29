@@ -8,6 +8,25 @@ info:
 servers:
 - url: http://localhost:3000
 paths:
+  /api/event/categories:
+    get:
+      summary: Get event categories.
+      tags:
+      - event
+      x-swagger-router-controller: timetable.views.event
+      operationId: get_event_categories
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  categories:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Category'
   /api/note/content:
     get:
       summary: Get note content.
@@ -45,6 +64,15 @@ paths:
 openapi: 3.0.2
 components:
   schemas:
+    Category:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        color:
+          type: string
     NoteForm:
       type: object
       properties:
