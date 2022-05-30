@@ -16,46 +16,32 @@ import { exists, mapValues } from '../runtime';
 /**
  * 
  * @export
- * @interface Category
+ * @interface InlineResponse2001
  */
-export interface Category {
-    /**
-     * 
-     * @type {string}
-     * @memberof Category
-     */
-    title?: string;
+export interface InlineResponse2001 {
     /**
      * 
      * @type {number}
-     * @memberof Category
+     * @memberof InlineResponse2001
      */
     id?: number;
-    /**
-     * 
-     * @type {string}
-     * @memberof Category
-     */
-    color?: string;
 }
 
-export function CategoryFromJSON(json: any): Category {
-    return CategoryFromJSONTyped(json, false);
+export function InlineResponse2001FromJSON(json: any): InlineResponse2001 {
+    return InlineResponse2001FromJSONTyped(json, false);
 }
 
-export function CategoryFromJSONTyped(json: any, ignoreDiscriminator: boolean): Category {
+export function InlineResponse2001FromJSONTyped(json: any, ignoreDiscriminator: boolean): InlineResponse2001 {
     if ((json === undefined) || (json === null)) {
         return json;
     }
     return {
         
-        'title': !exists(json, 'title') ? undefined : json['title'],
         'id': !exists(json, 'id') ? undefined : json['id'],
-        'color': !exists(json, 'color') ? undefined : json['color'],
     };
 }
 
-export function CategoryToJSON(value?: Category | null): any {
+export function InlineResponse2001ToJSON(value?: InlineResponse2001 | null): any {
     if (value === undefined) {
         return undefined;
     }
@@ -64,9 +50,7 @@ export function CategoryToJSON(value?: Category | null): any {
     }
     return {
         
-        'title': value.title,
         'id': value.id,
-        'color': value.color,
     };
 }
 

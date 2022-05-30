@@ -1,6 +1,12 @@
 import dayjs from 'dayjs'
 import { MockMethod } from 'vite-plugin-mock'
 
+const DATE_FORMAT = 'YYYY-MM-DD 09:00:00'
+
+function randomInt() {
+  return Math.floor(Math.random() * 1_000_000)
+}
+
 function getCategories() {
   const categories = [
     {'id': 1, 'title': 'Work', 'color': '#3a87ad'},
@@ -17,17 +23,25 @@ function getEvenList() {
   return [
     {
       id: 1,
+      categoryId: 1,
       title: 'event 1',
       start: now.format('YYYY-MM-DD 09:00:00'),
       end: now.format('YYYY-MM-DD 10:00:00'),
     },
     {
       id: 2,
+      categoryId: 2,
       title: 'event 2',
       start: now.format('YYYY-MM-DD 10:30:00'),
       end: now.format('YYYY-MM-DD 11:00:00'),
     },
   ]
+}
+
+function saveEvent() {
+  return {
+    id: randomInt(),
+  }
 }
 
 export default [
@@ -38,5 +52,10 @@ export default [
   {
     url: '/api/event/list',
     response: getEvenList,
+  },
+  {
+    url: '/api/event/save',
+    method: 'post',
+    response: saveEvent,
   },
 ] as MockMethod[]

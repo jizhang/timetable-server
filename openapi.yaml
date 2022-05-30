@@ -27,6 +27,29 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/Category'
+  /api/event/save:
+    post:
+      summary: Save event.
+      tags:
+      - event
+      x-swagger-router-controller: timetable.views.event
+      operationId: save_event
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Event'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
   /api/note/content:
     get:
       summary: Get note content.
@@ -67,12 +90,31 @@ components:
     Category:
       type: object
       properties:
-        id:
-          type: integer
         title:
           type: string
+        id:
+          type: integer
         color:
           type: string
+    Event:
+      type: object
+      properties:
+        title:
+          type: string
+          minLength: 1
+        start:
+          type: string
+        id:
+          type: integer
+        categoryId:
+          type: integer
+        end:
+          type: string
+      required:
+      - categoryId
+      - end
+      - start
+      - title
     NoteForm:
       type: object
       properties:
@@ -81,8 +123,8 @@ components:
     Note:
       type: object
       properties:
+        content:
+          type: string
         created:
           type: string
           format: date-time
-        content:
-          type: string

@@ -18,7 +18,18 @@ import {
     InlineResponse200,
     InlineResponse200FromJSON,
     InlineResponse200ToJSON,
+    InlineResponse2001,
+    InlineResponse2001FromJSON,
+    InlineResponse2001ToJSON,
 } from '../models';
+
+export interface SaveEventRequest {
+    title: string;
+    start: string;
+    categoryId: number;
+    end: string;
+    id?: number;
+}
 
 /**
  * 
@@ -48,6 +59,83 @@ export class EventApi extends runtime.BaseAPI {
      */
     async getEventCategories(initOverrides?: RequestInit): Promise<InlineResponse200> {
         const response = await this.getEventCategoriesRaw(initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Save event.
+     */
+    async saveEventRaw(requestParameters: SaveEventRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<InlineResponse2001>> {
+        if (requestParameters.title === null || requestParameters.title === undefined) {
+            throw new runtime.RequiredError('title','Required parameter requestParameters.title was null or undefined when calling saveEvent.');
+        }
+
+        if (requestParameters.start === null || requestParameters.start === undefined) {
+            throw new runtime.RequiredError('start','Required parameter requestParameters.start was null or undefined when calling saveEvent.');
+        }
+
+        if (requestParameters.categoryId === null || requestParameters.categoryId === undefined) {
+            throw new runtime.RequiredError('categoryId','Required parameter requestParameters.categoryId was null or undefined when calling saveEvent.');
+        }
+
+        if (requestParameters.end === null || requestParameters.end === undefined) {
+            throw new runtime.RequiredError('end','Required parameter requestParameters.end was null or undefined when calling saveEvent.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const consumes: runtime.Consume[] = [
+            { contentType: 'application/x-www-form-urlencoded' },
+        ];
+        // @ts-ignore: canConsumeForm may be unused
+        const canConsumeForm = runtime.canConsumeForm(consumes);
+
+        let formParams: { append(param: string, value: any): any };
+        let useForm = false;
+        if (useForm) {
+            formParams = new FormData();
+        } else {
+            formParams = new URLSearchParams();
+        }
+
+        if (requestParameters.title !== undefined) {
+            formParams.append('title', requestParameters.title as any);
+        }
+
+        if (requestParameters.start !== undefined) {
+            formParams.append('start', requestParameters.start as any);
+        }
+
+        if (requestParameters.id !== undefined) {
+            formParams.append('id', requestParameters.id as any);
+        }
+
+        if (requestParameters.categoryId !== undefined) {
+            formParams.append('categoryId', requestParameters.categoryId as any);
+        }
+
+        if (requestParameters.end !== undefined) {
+            formParams.append('end', requestParameters.end as any);
+        }
+
+        const response = await this.request({
+            path: `/api/event/save`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: formParams,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => InlineResponse2001FromJSON(jsonValue));
+    }
+
+    /**
+     * Save event.
+     */
+    async saveEvent(requestParameters: SaveEventRequest, initOverrides?: RequestInit): Promise<InlineResponse2001> {
+        const response = await this.saveEventRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
