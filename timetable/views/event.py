@@ -6,7 +6,7 @@ from marshmallow import ValidationError
 from timetable import app, db, auth, AppError
 from timetable.consts import CATEGORIES
 from timetable.models.event import Event
-from timetable.services import event as event_svc
+from timetable.services import event as event_service
 from timetable.views import InvalidUsage
 from timetable.schemas.event import categories_schema, event_schema
 
@@ -114,15 +114,15 @@ def save_event():
         raise AppError(e.messages)
 
     event = Event(**event_form)
-    event_svc.save(event)
+    event_id = event_service.save(event)
     db.session.commit()
 
-    return jsonify({'id': event.id})
+    return jsonify({'id': event_id})
 
 
 @app.post('/api/event/delete')
 @auth.login_required
-def event_delete() -> Response:
+def delete_event() -> Response:
     if not request.form.get('id'):
         raise AppError('ID cannot be empty.')
 

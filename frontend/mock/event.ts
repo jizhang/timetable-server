@@ -3,6 +3,10 @@ import { MockMethod } from 'vite-plugin-mock'
 
 const DATE_FORMAT = 'YYYY-MM-DD 09:00:00'
 
+function randomInt() {
+  return Math.floor(Math.random() * 1_000_000)
+}
+
 function getCategories() {
   const categories = [
     {'id': 1, 'title': 'Work', 'color': '#3a87ad'},
@@ -34,6 +38,12 @@ function getEvenList() {
   ]
 }
 
+function saveEvent() {
+  return {
+    id: randomInt(),
+  }
+}
+
 export default [
   {
     url: '/api/event/categories',
@@ -42,5 +52,10 @@ export default [
   {
     url: '/api/event/list',
     response: getEvenList,
+  },
+  {
+    url: '/api/event/save',
+    method: 'post',
+    response: saveEvent,
   },
 ] as MockMethod[]

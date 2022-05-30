@@ -1,11 +1,12 @@
 from typing import Any, Optional, Dict
-from datetime import datetime
 
 from marshmallow import Schema, fields, validate, validates, validates_schema, ValidationError
 
 from timetable import db
 from timetable.consts import CATEGORIES
 from timetable.models.event import Event
+
+DATETIME_FORMAT = '%Y-%m-%d %H:%M:%S'
 
 
 class CategorySchema(Schema):
@@ -18,14 +19,14 @@ class EventSchema(Schema):
     id = fields.Integer()
     category_id = fields.Integer(data_key='categoryId', required=True)
     title = fields.String(required=True, validate=validate.Length(min=1))
-    start = fields.String(required=True)
-    end = fields.String(required=True)
+    start = fields.DateTime(required=True, format=DATETIME_FORMAT)
+    end = fields.DateTime(required=True, format=DATETIME_FORMAT)
 
     @validates('id')
     def validate_id(self, value: Optional[int]):
         if not value:
             return
-        event = db.sesssion.query(Event).get(value)
+        event = db.session.query(Event).get(value)
         if event is None:
             raise ValidationError('Event not found.')
 
@@ -36,24 +37,10 @@ class EventSchema(Schema):
                 return
         raise ValidationError('Invalid category ID.')
 
-    @validates('start')
-    def validate_start(self, value: str):
-        self.validate_datetime(value, 'start')
-
-    @validates('end')
-    def validate_start(self, value: str):
-        self.validate_datetime(value, 'end')
-
     @validates_schema
-    def validate_schema(self, data: Dict[str, Any]):
+    def validate_schema(self, data: Dict[str, Any], **kwargs):
         if data['end'] < data['start']:
             raise ValidationError('Invalid start/end time.')
-
-    def validate_datetime(self, value: str, field: str):
-        try:
-            datetime.strptime(value, '%Y-%m-%d %H:%M:%S')
-        except ValueError as e:
-            raise ValidationError(f'Invalid {field} time.') from e
 
 
 category_schema = CategorySchema()

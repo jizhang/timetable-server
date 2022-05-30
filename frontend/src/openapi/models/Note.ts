@@ -21,16 +21,16 @@ import { exists, mapValues } from '../runtime';
 export interface Note {
     /**
      * 
-     * @type {Date}
-     * @memberof Note
-     */
-    created?: Date;
-    /**
-     * 
      * @type {string}
      * @memberof Note
      */
     content?: string;
+    /**
+     * 
+     * @type {Date}
+     * @memberof Note
+     */
+    created?: Date;
 }
 
 export function NoteFromJSON(json: any): Note {
@@ -43,8 +43,8 @@ export function NoteFromJSONTyped(json: any, ignoreDiscriminator: boolean): Note
     }
     return {
         
-        'created': !exists(json, 'created') ? undefined : (new Date(json['created'])),
         'content': !exists(json, 'content') ? undefined : json['content'],
+        'created': !exists(json, 'created') ? undefined : (new Date(json['created'])),
     };
 }
 
@@ -57,8 +57,8 @@ export function NoteToJSON(value?: Note | null): any {
     }
     return {
         
-        'created': value.created === undefined ? undefined : (value.created.toISOString()),
         'content': value.content,
+        'created': value.created === undefined ? undefined : (value.created.toISOString()),
     };
 }
 

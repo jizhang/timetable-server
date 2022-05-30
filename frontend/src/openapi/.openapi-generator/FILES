@@ -4,6 +4,7 @@ apis/index.ts
 index.ts
 models/Category.ts
 models/InlineResponse200.ts
+models/InlineResponse2001.ts
 models/Note.ts
 models/NoteForm.ts
 models/index.ts
