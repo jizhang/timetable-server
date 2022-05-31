@@ -6,6 +6,6 @@ gunicorn==20.1.0
 apispec[marshmallow]==5.2.2
 apispec-webframeworks==0.5.2
 python-dotenv==0.20.0
-python-dateutil-2.8.2
+python-dateutil==2.8.2
 
 -e .
