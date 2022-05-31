@@ -1,4 +1,4 @@
-import datetime
+import dateutil.parser
 
 from flask import request, jsonify, Response
 from marshmallow import ValidationError
@@ -7,8 +7,7 @@ from timetable import app, db, auth, AppError
 from timetable.consts import CATEGORIES
 from timetable.models.event import Event
 from timetable.services import event as event_service
-from timetable.views import InvalidUsage
-from timetable.schemas.event import categories_schema, event_schema
+from timetable.schemas.event import categories_schema, event_schema, event_schema
 
 
 
@@ -35,7 +34,7 @@ def get_event_categories() -> Response:
                     items:
                       $ref: '#/components/schemas/Category'
     """
-    return jsonify(categories=categories_schema.dump(CATEGORIES))
+    return jsonify(categories=categories_schema.dump(CATEGORIES)) # TODO Use schema
 
 
 @app.post('/api/event/ping')
@@ -46,32 +45,44 @@ def event_ping():
 
 @app.get('/api/event/list')
 @auth.login_required
-def event_list():
+def get_event_list():
+    """
+    ---
+    get:
+      summary: Get event list.
+      tags: [event]
+      x-swagger-router-controller: timetable.views.event
+      operationId: get_event_list
+      parameters:
+        - in: query
+          name: start
+          schema:
+            type: datetime
+        - in: query
+          name: end
+          schema:
+            type: datetime
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  events:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Event'
+    """
     try:
-        start = datetime.datetime.strptime(request.args['start'], '%Y-%m-%d')
-        end = datetime.datetime.strptime(request.args['end'], '%Y-%m-%d')
-    except Exception:
-        raise InvalidUsage('invalid dates')
+        start = dateutil.parser.parse(request.args['start'])
+        end = dateutil.parser.parse(request.args['end'])
+    except Exception as e:
+        raise AppError('Invalid start or end time.') from e
 
-    rows = db.session.query(Event).\
-        filter(Event.start >= start.strftime('%Y-%m-%d 00:00:00')).\
-        filter(Event.start <= end.strftime('%Y-%m-%d 23:59:59')).\
-        order_by(Event.id).\
-        all()
-
-    events = []
-    for row in rows:
-        events.append({
-            'id': row.id,
-            'title': row.title,
-            'start': row.start.strftime('%Y-%m-%d %H:%M:%S'),
-            'end': row.end.strftime('%Y-%m-%d %H:%M:%S'),
-            'categoryId': row.category_id,
-            'color': get_category_color(row.category_id)
-        })
-
-
-    return jsonify(events)
+    events = event_service.get_event_list(start, end)
+    return jsonify(events=event_schema.dump(events, many=True))
 
 
 def get_category_color(category_id):

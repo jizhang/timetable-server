@@ -20,7 +20,7 @@ function getCategories() {
 
 function getEvenList() {
   const now = dayjs()
-  return [
+  const events = [
     {
       id: 1,
       categoryId: 1,
@@ -36,6 +36,8 @@ function getEvenList() {
       end: now.format('YYYY-MM-DD 11:00:00'),
     },
   ]
+
+  return { events }
 }
 
 function saveEvent() {

@@ -50,6 +50,34 @@ paths:
                 properties:
                   id:
                     type: integer
+  /api/event/list:
+    get:
+      summary: Get event list.
+      tags:
+      - event
+      x-swagger-router-controller: timetable.views.event
+      operationId: get_event_list
+      parameters:
+      - in: query
+        name: start
+        schema:
+          type: datetime
+      - in: query
+        name: end
+        schema:
+          type: datetime
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  events:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Event'
   /api/note/content:
     get:
       summary: Get note content.
@@ -92,24 +120,26 @@ components:
       properties:
         title:
           type: string
-        id:
-          type: integer
         color:
           type: string
+        id:
+          type: integer
     Event:
       type: object
       properties:
+        categoryId:
+          type: integer
+        start:
+          type: string
+          format: date-time
         title:
           type: string
           minLength: 1
-        start:
-          type: string
         id:
-          type: integer
-        categoryId:
           type: integer
         end:
           type: string
+          format: date-time
       required:
       - categoryId
       - end
@@ -123,8 +153,8 @@ components:
     Note:
       type: object
       properties:
-        content:
-          type: string
         created:
           type: string
           format: date-time
+        content:
+          type: string

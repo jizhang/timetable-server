@@ -6,9 +6,9 @@ import '@fullcalendar/core/vdom'
 import FullCalendar, { CalendarOptions } from '@fullcalendar/vue3'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
-import type { CalendarApi, EventApi as CalendarEvent } from '@fullcalendar/core'
-import Note from '@/components/Note.vue'
+import { CalendarApi, EventApi as CalendarEvent } from '@fullcalendar/core'
 import { EventApi, type Category } from '@/openapi'
+import Note from '@/components/Note.vue'
 
 const eventApi = new EventApi()
 
@@ -29,13 +29,16 @@ function saveCalendarRef(el: InstanceType<typeof FullCalendar>) {
 const options: CalendarOptions = {
   allDaySlot: false,
   editable: true,
-  events: '/api/event/list',
   firstDay: 1,
   nowIndicator: true,
   plugins: [timeGridPlugin, interactionPlugin],
   scrollTime: '08:00:00',
   selectable: true,
   selectOverlap: false,
+
+  events({ start, end }) {
+    return getEvents(start, end)
+  },
 
   select({ start, end }) {
     Object.assign(eventForm, {
@@ -107,6 +110,21 @@ function updateEventForm(event: CalendarEvent) {
     title: event.title,
     start: formatDate(event.start!),
     end: formatDate(event.end!),
+  })
+}
+
+async function getEvents(start: Date, end: Date) {
+  const response = await eventApi.getEventList({ start, end })
+  if (!response.events) {
+    return []
+  }
+  return response.events.map((value) => {
+    return {
+      id: String(value.id),
+      title: value.title,
+      start: value.start,
+      end: value.end,
+    }
   })
 }
 </script>

@@ -46,4 +46,3 @@ class EventSchema(Schema):
 category_schema = CategorySchema()
 categories_schema = CategorySchema(many=True)
 event_schema = EventSchema()
-events_schema = EventSchema(many=True)

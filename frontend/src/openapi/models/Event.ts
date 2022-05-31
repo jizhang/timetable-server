@@ -16,46 +16,60 @@ import { exists, mapValues } from '../runtime';
 /**
  * 
  * @export
- * @interface Category
+ * @interface Event
  */
-export interface Category {
-    /**
-     * 
-     * @type {string}
-     * @memberof Category
-     */
-    title?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof Category
-     */
-    color?: string;
+export interface Event {
     /**
      * 
      * @type {number}
-     * @memberof Category
+     * @memberof Event
+     */
+    categoryId: number;
+    /**
+     * 
+     * @type {Date}
+     * @memberof Event
+     */
+    start: Date;
+    /**
+     * 
+     * @type {string}
+     * @memberof Event
+     */
+    title: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof Event
      */
     id?: number;
+    /**
+     * 
+     * @type {Date}
+     * @memberof Event
+     */
+    end: Date;
 }
 
-export function CategoryFromJSON(json: any): Category {
-    return CategoryFromJSONTyped(json, false);
+export function EventFromJSON(json: any): Event {
+    return EventFromJSONTyped(json, false);
 }
 
-export function CategoryFromJSONTyped(json: any, ignoreDiscriminator: boolean): Category {
+export function EventFromJSONTyped(json: any, ignoreDiscriminator: boolean): Event {
     if ((json === undefined) || (json === null)) {
         return json;
     }
     return {
         
-        'title': !exists(json, 'title') ? undefined : json['title'],
-        'color': !exists(json, 'color') ? undefined : json['color'],
+        'categoryId': json['categoryId'],
+        'start': (new Date(json['start'])),
+        'title': json['title'],
         'id': !exists(json, 'id') ? undefined : json['id'],
+        'end': (new Date(json['end'])),
     };
 }
 
-export function CategoryToJSON(value?: Category | null): any {
+export function EventToJSON(value?: Event | null): any {
     if (value === undefined) {
         return undefined;
     }
@@ -64,9 +78,11 @@ export function CategoryToJSON(value?: Category | null): any {
     }
     return {
         
+        'categoryId': value.categoryId,
+        'start': (value.start.toISOString()),
         'title': value.title,
-        'color': value.color,
         'id': value.id,
+        'end': (value.end.toISOString()),
     };
 }
 

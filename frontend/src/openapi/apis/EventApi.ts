@@ -15,19 +15,30 @@
 
 import * as runtime from '../runtime';
 import {
+    Datetime,
+    DatetimeFromJSON,
+    DatetimeToJSON,
     InlineResponse200,
     InlineResponse200FromJSON,
     InlineResponse200ToJSON,
     InlineResponse2001,
     InlineResponse2001FromJSON,
     InlineResponse2001ToJSON,
+    InlineResponse2002,
+    InlineResponse2002FromJSON,
+    InlineResponse2002ToJSON,
 } from '../models';
 
+export interface GetEventListRequest {
+    start?: Datetime;
+    end?: Datetime;
+}
+
 export interface SaveEventRequest {
-    title: string;
-    start: string;
     categoryId: number;
-    end: string;
+    start: Date;
+    title: string;
+    end: Date;
     id?: number;
 }
 
@@ -63,19 +74,53 @@ export class EventApi extends runtime.BaseAPI {
     }
 
     /**
+     * Get event list.
+     */
+    async getEventListRaw(requestParameters: GetEventListRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<InlineResponse2002>> {
+        const queryParameters: any = {};
+
+        if (requestParameters.start !== undefined) {
+            queryParameters['start'] = requestParameters.start;
+        }
+
+        if (requestParameters.end !== undefined) {
+            queryParameters['end'] = requestParameters.end;
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/api/event/list`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => InlineResponse2002FromJSON(jsonValue));
+    }
+
+    /**
+     * Get event list.
+     */
+    async getEventList(requestParameters: GetEventListRequest = {}, initOverrides?: RequestInit): Promise<InlineResponse2002> {
+        const response = await this.getEventListRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Save event.
      */
     async saveEventRaw(requestParameters: SaveEventRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<InlineResponse2001>> {
-        if (requestParameters.title === null || requestParameters.title === undefined) {
-            throw new runtime.RequiredError('title','Required parameter requestParameters.title was null or undefined when calling saveEvent.');
+        if (requestParameters.categoryId === null || requestParameters.categoryId === undefined) {
+            throw new runtime.RequiredError('categoryId','Required parameter requestParameters.categoryId was null or undefined when calling saveEvent.');
         }
 
         if (requestParameters.start === null || requestParameters.start === undefined) {
             throw new runtime.RequiredError('start','Required parameter requestParameters.start was null or undefined when calling saveEvent.');
         }
 
-        if (requestParameters.categoryId === null || requestParameters.categoryId === undefined) {
-            throw new runtime.RequiredError('categoryId','Required parameter requestParameters.categoryId was null or undefined when calling saveEvent.');
+        if (requestParameters.title === null || requestParameters.title === undefined) {
+            throw new runtime.RequiredError('title','Required parameter requestParameters.title was null or undefined when calling saveEvent.');
         }
 
         if (requestParameters.end === null || requestParameters.end === undefined) {
@@ -100,20 +145,20 @@ export class EventApi extends runtime.BaseAPI {
             formParams = new URLSearchParams();
         }
 
-        if (requestParameters.title !== undefined) {
-            formParams.append('title', requestParameters.title as any);
+        if (requestParameters.categoryId !== undefined) {
+            formParams.append('categoryId', requestParameters.categoryId as any);
         }
 
         if (requestParameters.start !== undefined) {
             formParams.append('start', requestParameters.start as any);
         }
 
-        if (requestParameters.id !== undefined) {
-            formParams.append('id', requestParameters.id as any);
+        if (requestParameters.title !== undefined) {
+            formParams.append('title', requestParameters.title as any);
         }
 
-        if (requestParameters.categoryId !== undefined) {
-            formParams.append('categoryId', requestParameters.categoryId as any);
+        if (requestParameters.id !== undefined) {
+            formParams.append('id', requestParameters.id as any);
         }
 
         if (requestParameters.end !== undefined) {
