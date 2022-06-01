@@ -134,6 +134,33 @@ def save_event():
 @app.post('/api/event/delete')
 @auth.login_required
 def delete_event() -> Response:
+    """
+    ---
+    post:
+      summary: Delete event.
+      tags: [event]
+      x-swagger-router-controller: timetable.views.event
+      operationId: delete_event
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: number
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+    """
     if not request.form.get('id'):
         raise AppError('ID cannot be empty.')
 
@@ -141,6 +168,7 @@ def delete_event() -> Response:
     if row is None:
         raise AppError('Event not found.')
 
+    row_id = row.id
     db.session.delete(row)
     db.session.commit()
-    return jsonify('ok')
+    return jsonify(id=row_id)

@@ -78,6 +78,32 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/Event'
+  /api/event/delete:
+    post:
+      summary: Delete event.
+      tags:
+      - event
+      x-swagger-router-controller: timetable.views.event
+      operationId: delete_event
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: number
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
   /api/note/content:
     get:
       summary: Get note content.
@@ -118,28 +144,28 @@ components:
     Category:
       type: object
       properties:
-        title:
-          type: string
-        color:
-          type: string
         id:
           type: integer
+        color:
+          type: string
+        title:
+          type: string
     Event:
       type: object
       properties:
-        categoryId:
-          type: integer
         start:
           type: string
           format: date-time
-        title:
-          type: string
-          minLength: 1
-        id:
-          type: integer
         end:
           type: string
           format: date-time
+        id:
+          type: integer
+        categoryId:
+          type: integer
+        title:
+          type: string
+          minLength: 1
       required:
       - categoryId
       - end

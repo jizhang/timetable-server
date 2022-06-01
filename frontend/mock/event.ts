@@ -1,8 +1,6 @@
 import dayjs from 'dayjs'
 import { MockMethod } from 'vite-plugin-mock'
 
-const DATE_FORMAT = 'YYYY-MM-DD 09:00:00'
-
 function randomInt() {
   return Math.floor(Math.random() * 1_000_000)
 }
@@ -46,6 +44,12 @@ function saveEvent() {
   }
 }
 
+function deleteEvent() {
+  return {
+    id: randomInt(),
+  }
+}
+
 export default [
   {
     url: '/api/event/categories',
@@ -59,5 +63,10 @@ export default [
     url: '/api/event/save',
     method: 'post',
     response: saveEvent,
+  },
+  {
+    url: '/api/event/delete',
+    method: 'post',
+    response: deleteEvent,
   },
 ] as MockMethod[]

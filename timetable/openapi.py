@@ -25,5 +25,6 @@ with app.test_request_context():
     spec.path(view=event_view.get_event_categories)
     spec.path(view=event_view.save_event)
     spec.path(view=event_view.get_event_list)
+    spec.path(view=event_view.delete_event)
     spec.path(view=note_view.get_note_content)
     spec.path(view=note_view.save_note)

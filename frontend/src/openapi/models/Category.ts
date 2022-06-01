@@ -21,10 +21,10 @@ import { exists, mapValues } from '../runtime';
 export interface Category {
     /**
      * 
-     * @type {string}
+     * @type {number}
      * @memberof Category
      */
-    title?: string;
+    id?: number;
     /**
      * 
      * @type {string}
@@ -33,10 +33,10 @@ export interface Category {
     color?: string;
     /**
      * 
-     * @type {number}
+     * @type {string}
      * @memberof Category
      */
-    id?: number;
+    title?: string;
 }
 
 export function CategoryFromJSON(json: any): Category {
@@ -49,9 +49,9 @@ export function CategoryFromJSONTyped(json: any, ignoreDiscriminator: boolean): 
     }
     return {
         
-        'title': !exists(json, 'title') ? undefined : json['title'],
-        'color': !exists(json, 'color') ? undefined : json['color'],
         'id': !exists(json, 'id') ? undefined : json['id'],
+        'color': !exists(json, 'color') ? undefined : json['color'],
+        'title': !exists(json, 'title') ? undefined : json['title'],
     };
 }
 
@@ -64,9 +64,9 @@ export function CategoryToJSON(value?: Category | null): any {
     }
     return {
         
-        'title': value.title,
-        'color': value.color,
         'id': value.id,
+        'color': value.color,
+        'title': value.title,
     };
 }
 

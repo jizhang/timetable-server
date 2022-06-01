@@ -121,11 +121,22 @@ async function getEvents(start: Date, end: Date) {
   return response.events.map((value) => {
     return {
       id: String(value.id),
+      categoryId: value.categoryId,
       title: value.title,
       start: value.start,
       end: value.end,
     }
   })
+}
+
+function handleDeleteEvent() {
+  if (confirm('Are you sure?')) {
+    eventApi.deleteEvent({ id: eventForm.id }).then(() => {
+      const event = calendarApi.getEventById(String(eventForm.id)) // TODO Use response.id
+      event?.remove()
+      modal.hide()
+    })
+  }
 }
 </script>
 
@@ -164,6 +175,7 @@ async function getEvents(start: Date, end: Date) {
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button v-if="eventForm.id" class="btn btn-danger" @click="handleDeleteEvent">Delete</button>
             <button type="button" class="btn btn-primary" @click="saveEvent">Save</button>
           </div>
         </div>
