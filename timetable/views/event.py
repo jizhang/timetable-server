@@ -7,7 +7,7 @@ from timetable import app, db, auth, AppError
 from timetable.consts import CATEGORIES
 from timetable.models.event import Event
 from timetable.services import event as event_service
-from timetable.schemas.event import categories_schema, event_schema, event_schema
+from timetable.schemas.event import categories_schema, event_schema
 
 
 
@@ -83,13 +83,6 @@ def get_event_list():
 
     events = event_service.get_event_list(start, end)
     return jsonify(events=event_schema.dump(events, many=True))
-
-
-def get_category_color(category_id):
-    for item in CATEGORIES:
-        if item['id'] == category_id:
-            return item['color']
-    return ''
 
 
 @app.post('/api/event/save')

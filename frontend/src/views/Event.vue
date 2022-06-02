@@ -6,26 +6,19 @@ import '@fullcalendar/core/vdom'
 import FullCalendar, { CalendarOptions } from '@fullcalendar/vue3'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
-import { CalendarApi, EventApi as CalendarEvent } from '@fullcalendar/core'
+import { CalendarApi } from '@fullcalendar/core'
+import type { EventApi as CalendarEvent } from '@fullcalendar/core'
 import { EventApi, type Category } from '@/openapi'
 import Note from '@/components/Note.vue'
 
 const eventApi = new EventApi()
 
+// Utilities
 function formatDate(date: Date) {
   return dayjs(date).format('YYYY-MM-DD HH:mm:ss')
 }
 
-let modal: Modal
-function saveModalRef(el: HTMLElement) {
-  modal = new Modal(el, { backdrop: 'static' })
-}
-
-let calendarApi: CalendarApi
-function saveCalendarRef(el: InstanceType<typeof FullCalendar>) {
-  calendarApi = el.getApi()
-}
-
+// Calendar
 const options: CalendarOptions = {
   allDaySlot: false,
   editable: true,
@@ -35,10 +28,6 @@ const options: CalendarOptions = {
   scrollTime: '08:00:00',
   selectable: true,
   selectOverlap: false,
-
-  events({ start, end }) {
-    return getEvents(start, end)
-  },
 
   select({ start, end }) {
     Object.assign(eventForm, {
@@ -54,63 +43,42 @@ const options: CalendarOptions = {
     modal.show()
   },
 
-  eventDrop({ event, revert }) {
+  eventDrop({ event }) {
     updateEventForm(event)
     saveEvent()
   },
 
-  eventResize({ event, revert }) {
+  eventResize({ event }) {
     updateEventForm(event)
     saveEvent()
   },
 }
-
-const defaultEventForm = {
-  id: 0, // TODO number | null
-  categoryId: 1,
-  title: '',
-  start: '',
-  end: '',
-}
-
-const eventForm = reactive({
-  ...defaultEventForm,
-})
 
 const categories = ref<Category[]>([])
+const calendarRef = ref<InstanceType<typeof FullCalendar> | null>(null)
+let calendarApi: CalendarApi
 
 onMounted(() => {
+  if (!calendarRef.value) {
+    return
+  }
+  calendarApi = calendarRef.value.getApi()
+
   // TODO Pinia
   eventApi.getEventCategories().then((response) => {
     categories.value = response.categories || []
+    calendarApi.addEventSource(({start, end}) => {
+      return getEvents(start, end)
+    })
   })
 })
 
-function saveEvent() {
-  eventApi.saveEvent(eventForm).then((response) => {
-    // TODO Event form may change during request.
-    if (!eventForm.id) {
-      calendarApi.addEvent({
-        ...eventForm,
-        id: String(response.id),
-      })
-    } else {
-      const event = calendarApi.getEventById(String(eventForm.id))
-      event?.setProp('title', eventForm.title)
-      event?.setExtendedProp('categoryId', eventForm.categoryId)
+function getCategoryColor(categoryId: number) {
+  for (const category of categories.value) {
+    if (category.id === categoryId) {
+      return category.color
     }
-    modal.hide()
-  })
-}
-
-function updateEventForm(event: CalendarEvent) {
-  Object.assign(eventForm, {
-    id: event.id,
-    categoryId: event.extendedProps.categoryId,
-    title: event.title,
-    start: formatDate(event.start!),
-    end: formatDate(event.end!),
-  })
+  }
 }
 
 async function getEvents(start: Date, end: Date) {
@@ -125,7 +93,57 @@ async function getEvents(start: Date, end: Date) {
       title: value.title,
       start: value.start,
       end: value.end,
+      color: getCategoryColor(value.categoryId),
     }
+  })
+}
+
+// Event
+let modal: Modal
+function saveModalRef(el: HTMLElement | null) {
+  if (el !== null) {
+    modal = new Modal(el, { backdrop: 'static' })
+  }
+}
+
+const defaultEventForm = {
+  id: 0, // TODO number | null
+  categoryId: 1,
+  title: '',
+  start: '',
+  end: '',
+}
+
+const eventForm = reactive({
+  ...defaultEventForm,
+})
+
+function saveEvent() {
+  eventApi.saveEvent(eventForm).then((response) => {
+    // TODO Event form may change during request.
+    if (!eventForm.id) {
+      calendarApi.addEvent({
+        ...eventForm,
+        id: String(response.id),
+        color: getCategoryColor(eventForm.categoryId),
+      })
+    } else {
+      const event = calendarApi.getEventById(String(eventForm.id))
+      event?.setProp('title', eventForm.title)
+      event?.setProp('color', getCategoryColor(eventForm.categoryId))
+      event?.setExtendedProp('categoryId', eventForm.categoryId)
+    }
+    modal.hide()
+  })
+}
+
+function updateEventForm(event: CalendarEvent) {
+  Object.assign(eventForm, {
+    id: event.id,
+    categoryId: event.extendedProps.categoryId,
+    title: event.title,
+    start: formatDate(event.start!),
+    end: formatDate(event.end!),
   })
 }
 
@@ -143,7 +161,7 @@ function handleDeleteEvent() {
 <template>
   <div>
     <div class="calendar">
-      <FullCalendar :options="options" :ref="saveCalendarRef" />
+      <FullCalendar :options="options" ref="calendarRef" />
     </div>
 
     <div class="note">
