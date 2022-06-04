@@ -219,8 +219,12 @@ onMounted(() => {
   width: 1000px;
 }
 
-.calendar tr {
+.calendar .fc-timegrid-slot {
   height: 30px;
+}
+
+.calendar .fc-timegrid-event {
+  line-height: 12px;
 }
 
 .note {
