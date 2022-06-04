@@ -8,9 +8,10 @@ import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import { CalendarApi } from '@fullcalendar/core'
 import type { EventApi as CalendarEvent } from '@fullcalendar/core'
-import { EventApi, type Category } from '@/openapi'
+import { EventApi, CommonApi, type Category } from '@/openapi'
 import Note from '@/components/Note.vue'
 
+const commonApi = new CommonApi()
 const eventApi = new EventApi()
 
 // Utilities
@@ -156,6 +157,17 @@ function handleDeleteEvent() {
     })
   }
 }
+
+onMounted(() => {
+  const pingHandler = setInterval(() => {
+    commonApi.ping().catch(() => {
+      clearInterval(pingHandler)
+      if (confirm('Ping error, reload?')) {
+        location.reload()
+      }
+    })
+  }, 30_000)
+})
 </script>
 
 <template>
@@ -207,8 +219,12 @@ function handleDeleteEvent() {
   width: 1000px;
 }
 
-.calendar tr {
+.calendar .fc-timegrid-slot {
   height: 30px;
+}
+
+.calendar .fc-timegrid-event {
+  line-height: 12px;
 }
 
 .note {

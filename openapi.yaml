@@ -8,6 +8,21 @@ info:
 servers:
 - url: http://localhost:3000
 paths:
+  /api/ping:
+    get:
+      summary: Ping API server.
+      tags:
+      - common
+      x-swagger-router-controller: timetable.views
+      operationId: ping
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: pong
   /api/event/categories:
     get:
       summary: Get event categories.
@@ -146,26 +161,26 @@ components:
       properties:
         id:
           type: integer
-        color:
-          type: string
         title:
+          type: string
+        color:
           type: string
     Event:
       type: object
       properties:
-        start:
+        end:
           type: string
           format: date-time
-        end:
+        start:
           type: string
           format: date-time
         id:
           type: integer
-        categoryId:
-          type: integer
         title:
           type: string
           minLength: 1
+        categoryId:
+          type: integer
       required:
       - categoryId
       - end

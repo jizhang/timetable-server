@@ -42,17 +42,21 @@ function saveNote() {
 <template>
   <form @submit="handleSubmit">
     <div class="title">Note</div>
+    <textarea class="content" v-model="form.content" @input="handleChangeContent"></textarea>
     <div>
-      <textarea class="content" v-model="form.content" @input="handleChangeContent"></textarea>
+      <button type="submit" class="btn btn-primary btn-sm" :disabled="isLoading">Save</button>
     </div>
-    <div>
-      <input type="submit" value="Save" :disabled="isLoading" />
+    <div v-if="created" class="alert alert-success saved">
+      Saved {{ created }}
     </div>
-    <div v-if="created">Saved {{ created }}</div>
   </form>
 </template>
 
 <style scoped>
+* {
+  --vertical-gap: 10px;
+}
+
 .title {
   font-size: 20px;
   font-weight: bold;
@@ -60,7 +64,15 @@ function saveNote() {
 }
 
 .content {
+  display: block;
   width: 240px;
   height: 560px;
+  margin: var(--vertical-gap) 0;
+}
+
+.saved {
+  text-align: center;
+  margin-top: var(--vertical-gap);
+  padding: 8px;
 }
 </style>

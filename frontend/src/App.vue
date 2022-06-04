@@ -10,5 +10,6 @@ import Event from '@/views/Event.vue'
 <style>
 #app {
   font-size: 14px;
+  padding: 10px;
 }
 </style>
