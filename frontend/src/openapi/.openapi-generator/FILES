@@ -1,3 +1,4 @@
+apis/CommonApi.ts
 apis/EventApi.ts
 apis/NoteApi.ts
 apis/index.ts

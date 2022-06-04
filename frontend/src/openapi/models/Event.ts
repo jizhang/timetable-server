@@ -24,13 +24,13 @@ export interface Event {
      * @type {Date}
      * @memberof Event
      */
-    start: Date;
+    end: Date;
     /**
      * 
      * @type {Date}
      * @memberof Event
      */
-    end: Date;
+    start: Date;
     /**
      * 
      * @type {number}
@@ -39,16 +39,16 @@ export interface Event {
     id?: number;
     /**
      * 
-     * @type {number}
-     * @memberof Event
-     */
-    categoryId: number;
-    /**
-     * 
      * @type {string}
      * @memberof Event
      */
     title: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof Event
+     */
+    categoryId: number;
 }
 
 export function EventFromJSON(json: any): Event {
@@ -61,11 +61,11 @@ export function EventFromJSONTyped(json: any, ignoreDiscriminator: boolean): Eve
     }
     return {
         
-        'start': (new Date(json['start'])),
         'end': (new Date(json['end'])),
+        'start': (new Date(json['start'])),
         'id': !exists(json, 'id') ? undefined : json['id'],
-        'categoryId': json['categoryId'],
         'title': json['title'],
+        'categoryId': json['categoryId'],
     };
 }
 
@@ -78,11 +78,11 @@ export function EventToJSON(value?: Event | null): any {
     }
     return {
         
-        'start': (value.start.toISOString()),
         'end': (value.end.toISOString()),
+        'start': (value.start.toISOString()),
         'id': value.id,
-        'categoryId': value.categoryId,
         'title': value.title,
+        'categoryId': value.categoryId,
     };
 }
 

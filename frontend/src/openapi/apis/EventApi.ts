@@ -39,10 +39,10 @@ export interface GetEventListRequest {
 }
 
 export interface SaveEventRequest {
-    start: Date;
     end: Date;
-    categoryId: number;
+    start: Date;
     title: string;
+    categoryId: number;
     id?: number;
 }
 
@@ -160,20 +160,20 @@ export class EventApi extends runtime.BaseAPI {
      * Save event.
      */
     async saveEventRaw(requestParameters: SaveEventRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<InlineResponse2001>> {
-        if (requestParameters.start === null || requestParameters.start === undefined) {
-            throw new runtime.RequiredError('start','Required parameter requestParameters.start was null or undefined when calling saveEvent.');
-        }
-
         if (requestParameters.end === null || requestParameters.end === undefined) {
             throw new runtime.RequiredError('end','Required parameter requestParameters.end was null or undefined when calling saveEvent.');
         }
 
-        if (requestParameters.categoryId === null || requestParameters.categoryId === undefined) {
-            throw new runtime.RequiredError('categoryId','Required parameter requestParameters.categoryId was null or undefined when calling saveEvent.');
+        if (requestParameters.start === null || requestParameters.start === undefined) {
+            throw new runtime.RequiredError('start','Required parameter requestParameters.start was null or undefined when calling saveEvent.');
         }
 
         if (requestParameters.title === null || requestParameters.title === undefined) {
             throw new runtime.RequiredError('title','Required parameter requestParameters.title was null or undefined when calling saveEvent.');
+        }
+
+        if (requestParameters.categoryId === null || requestParameters.categoryId === undefined) {
+            throw new runtime.RequiredError('categoryId','Required parameter requestParameters.categoryId was null or undefined when calling saveEvent.');
         }
 
         const queryParameters: any = {};
@@ -194,24 +194,24 @@ export class EventApi extends runtime.BaseAPI {
             formParams = new URLSearchParams();
         }
 
-        if (requestParameters.start !== undefined) {
-            formParams.append('start', requestParameters.start as any);
-        }
-
         if (requestParameters.end !== undefined) {
             formParams.append('end', requestParameters.end as any);
+        }
+
+        if (requestParameters.start !== undefined) {
+            formParams.append('start', requestParameters.start as any);
         }
 
         if (requestParameters.id !== undefined) {
             formParams.append('id', requestParameters.id as any);
         }
 
-        if (requestParameters.categoryId !== undefined) {
-            formParams.append('categoryId', requestParameters.categoryId as any);
-        }
-
         if (requestParameters.title !== undefined) {
             formParams.append('title', requestParameters.title as any);
+        }
+
+        if (requestParameters.categoryId !== undefined) {
+            formParams.append('categoryId', requestParameters.categoryId as any);
         }
 
         const response = await this.request({

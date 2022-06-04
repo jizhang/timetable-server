@@ -10,7 +10,6 @@ from timetable.services import event as event_service
 from timetable.schemas.event import categories_schema, event_schema
 
 
-
 @app.get('/api/event/categories')
 @auth.login_required
 def get_event_categories() -> Response:
@@ -35,12 +34,6 @@ def get_event_categories() -> Response:
                       $ref: '#/components/schemas/Category'
     """
     return jsonify(categories=categories_schema.dump(CATEGORIES)) # TODO Use schema
-
-
-@app.post('/api/event/ping')
-@auth.login_required
-def event_ping():
-    return jsonify('pong')
 
 
 @app.get('/api/event/list')
