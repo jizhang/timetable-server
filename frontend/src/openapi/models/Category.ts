@@ -30,13 +30,13 @@ export interface Category {
      * @type {string}
      * @memberof Category
      */
-    title?: string;
+    color?: string;
     /**
      * 
      * @type {string}
      * @memberof Category
      */
-    color?: string;
+    title?: string;
 }
 
 export function CategoryFromJSON(json: any): Category {
@@ -50,8 +50,8 @@ export function CategoryFromJSONTyped(json: any, ignoreDiscriminator: boolean): 
     return {
         
         'id': !exists(json, 'id') ? undefined : json['id'],
-        'title': !exists(json, 'title') ? undefined : json['title'],
         'color': !exists(json, 'color') ? undefined : json['color'],
+        'title': !exists(json, 'title') ? undefined : json['title'],
     };
 }
 
@@ -65,8 +65,8 @@ export function CategoryToJSON(value?: Category | null): any {
     return {
         
         'id': value.id,
-        'title': value.title,
         'color': value.color,
+        'title': value.title,
     };
 }
 

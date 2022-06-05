@@ -1,9 +1,7 @@
 <script setup lang="ts">
 import { ref, reactive, onMounted } from 'vue'
 import dayjs from 'dayjs'
-import { NoteApi } from '@/openapi'
-
-const noteApi = new NoteApi()
+import { noteApi } from '@/api'
 
 const isLoading = ref(false)
 const created = ref('')

@@ -21,18 +21,6 @@ import { exists, mapValues } from '../runtime';
 export interface Event {
     /**
      * 
-     * @type {Date}
-     * @memberof Event
-     */
-    end: Date;
-    /**
-     * 
-     * @type {Date}
-     * @memberof Event
-     */
-    start: Date;
-    /**
-     * 
      * @type {number}
      * @memberof Event
      */
@@ -49,6 +37,18 @@ export interface Event {
      * @memberof Event
      */
     categoryId: number;
+    /**
+     * 
+     * @type {Date}
+     * @memberof Event
+     */
+    end: Date;
+    /**
+     * 
+     * @type {Date}
+     * @memberof Event
+     */
+    start: Date;
 }
 
 export function EventFromJSON(json: any): Event {
@@ -61,11 +61,11 @@ export function EventFromJSONTyped(json: any, ignoreDiscriminator: boolean): Eve
     }
     return {
         
-        'end': (new Date(json['end'])),
-        'start': (new Date(json['start'])),
         'id': !exists(json, 'id') ? undefined : json['id'],
         'title': json['title'],
         'categoryId': json['categoryId'],
+        'end': (new Date(json['end'])),
+        'start': (new Date(json['start'])),
     };
 }
 
@@ -78,11 +78,11 @@ export function EventToJSON(value?: Event | null): any {
     }
     return {
         
-        'end': (value.end.toISOString()),
-        'start': (value.start.toISOString()),
         'id': value.id,
         'title': value.title,
         'categoryId': value.categoryId,
+        'end': (value.end.toISOString()),
+        'start': (value.start.toISOString()),
     };
 }
 
