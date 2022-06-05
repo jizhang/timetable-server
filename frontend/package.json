@@ -5,7 +5,8 @@
   "scripts": {
     "start": "vite",
     "start:local": "cross-env MOCK=none vite",
-    "build": "vue-tsc --noEmit && vite build",
+    "checktype": "vue-tsc --noEmit",
+    "build": "vite build",
     "preview": "vite preview",
     "gen": "openapi-generator-cli generate"
   },
@@ -17,7 +18,7 @@
     "@popperjs/core": "^2.11.5",
     "bootstrap": "^5.1.3",
     "dayjs": "^1.11.2",
-    "vue": "^3.2.25"
+    "vue": "^3.2.36"
   },
   "devDependencies": {
     "@openapitools/openapi-generator-cli": "^2.5.1",
@@ -26,13 +27,13 @@
     "@vitejs/plugin-vue": "^2.3.1",
     "cross-env": "^7.0.3",
     "mockjs": "^1.1.0",
-    "typescript": "^4.5.4",
-    "vite": "^2.9.7",
+    "typescript": "^4.7.3",
+    "vite": "^2.9.9",
     "vite-plugin-mock": "^2.9.6",
-    "vue-tsc": "^0.34.7"
+    "vue-tsc": "^0.36.1"
   },
   "engines": {
-    "node": ">=12.18.0",
+    "node": ">=12.22.0",
     "yarn": "^1.22.0"
   }
 }
