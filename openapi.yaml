@@ -5,8 +5,6 @@ info:
   description: What have you done today?
   title: Timetable
   version: 0.1.0
-servers:
-- url: http://localhost:3000
 paths:
   /api/ping:
     get:
@@ -161,19 +159,13 @@ components:
       properties:
         id:
           type: integer
-        title:
-          type: string
         color:
+          type: string
+        title:
           type: string
     Event:
       type: object
       properties:
-        end:
-          type: string
-          format: date-time
-        start:
-          type: string
-          format: date-time
         id:
           type: integer
         title:
@@ -181,6 +173,12 @@ components:
           minLength: 1
         categoryId:
           type: integer
+        end:
+          type: string
+          format: date-time
+        start:
+          type: string
+          format: date-time
       required:
       - categoryId
       - end
