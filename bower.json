@@ -1,9 +1,0 @@
-{
-  "name": "timetable",
-  "dependencies": {
-    "jquery": "1.11.1",
-    "jquery-ui": "1.11.4",
-    "moment": "2.5.0",
-    "fullcalendar": "2.4.0"
-  }
-}
