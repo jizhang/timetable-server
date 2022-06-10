@@ -241,18 +241,22 @@ onMounted(() => {
   width: 1000px;
 }
 
+.calendar .fc-col-header-cell a {
+  color: inherit;
+  text-decoration: inherit;
+}
+
 .calendar .fc-timegrid-slot {
   height: 30px;
 }
 
 .calendar .fc-timegrid-event {
   font-size: 12px;
-  line-height: 12px;
+  line-height: 100%;
 }
 
-.calendar .fc-col-header-cell a {
-  color: inherit;
-  text-decoration: inherit;
+.calendar .fc-event-title {
+  overflow: visible;
 }
 
 .note {
