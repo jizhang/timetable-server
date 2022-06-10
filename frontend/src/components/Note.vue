@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import debounce from 'just-debounce-it'
 import { ref, reactive, onMounted } from 'vue'
 import dayjs from 'dayjs'
 import { noteApi } from '@/api'
@@ -15,18 +16,8 @@ onMounted(() => {
   })
 })
 
-let saveHandler: NodeJS.Timeout
-
-function handleChangeContent() {
-  clearTimeout(saveHandler)
-  saveHandler = setTimeout(() => {
-    saveNote()
-  }, 5000)
-}
-
 function handleSubmit(event: Event) {
   event.preventDefault()
-  clearTimeout(saveHandler)
   saveNote()
 }
 
@@ -35,12 +26,14 @@ function saveNote() {
     created.value = dayjs(response.created).format('YYYY-MM-DD HH:mm:ss')
   })
 }
+
+const handleChangeContent = debounce(saveNote, 5000)
 </script>
 
 <template>
   <form @submit="handleSubmit">
     <div class="title">Note</div>
-    <textarea class="content" v-model="form.content" @input="handleChangeContent"></textarea>
+    <textarea class="content font-monospace lh-sm" v-model="form.content" @input="handleChangeContent"></textarea>
     <div>
       <button type="submit" class="btn btn-primary btn-sm" :disabled="isLoading">Save</button>
     </div>
@@ -66,6 +59,7 @@ function saveNote() {
   width: 240px;
   height: 560px;
   margin: var(--vertical-gap) 0;
+  font-size: 12px;
 }
 
 .saved {
