@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import debounce from 'just-debounce-it'
 import { ref, reactive, onMounted } from 'vue'
 import dayjs from 'dayjs'
 import { noteApi } from '@/api'
@@ -15,18 +16,8 @@ onMounted(() => {
   })
 })
 
-let saveHandler: NodeJS.Timeout
-
-function handleChangeContent() {
-  clearTimeout(saveHandler)
-  saveHandler = setTimeout(() => {
-    saveNote()
-  }, 5000)
-}
-
 function handleSubmit(event: Event) {
   event.preventDefault()
-  clearTimeout(saveHandler)
   saveNote()
 }
 
@@ -35,6 +26,8 @@ function saveNote() {
     created.value = dayjs(response.created).format('YYYY-MM-DD HH:mm:ss')
   })
 }
+
+const handleChangeContent = debounce(saveNote, 5000)
 </script>
 
 <template>
