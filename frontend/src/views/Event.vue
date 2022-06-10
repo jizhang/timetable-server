@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import dayjs from 'dayjs'
-import { ref, reactive, onMounted } from 'vue'
+import debounce from 'just-debounce-it'
+import { ref, reactive, onMounted, onUnmounted } from 'vue'
 import { Modal } from 'bootstrap'
 import '@fullcalendar/core/vdom'
 import FullCalendar, { CalendarOptions } from '@fullcalendar/vue3'
@@ -17,6 +18,10 @@ function formatDate(date: Date) {
   return dayjs(date).format('YYYY-MM-DD HH:mm:ss')
 }
 
+function calculateCalendarHeight() {
+  return window.innerHeight - 50
+}
+
 const timeFormat: FormatterInput = {
   hour: '2-digit',
   minute: '2-digit',
@@ -29,6 +34,7 @@ const options: CalendarOptions = {
   editable: true,
   eventTimeFormat: timeFormat,
   firstDay: 1,
+  height: calculateCalendarHeight(),
   nowIndicator: true,
   plugins: [timeGridPlugin, interactionPlugin],
   scrollTime: '08:00:00',
@@ -65,6 +71,10 @@ const categories = ref<Category[]>([])
 const calendarRef = ref<InstanceType<typeof FullCalendar> | null>(null)
 let calendarApi: CalendarApi
 
+const handleResizeWindow = debounce(() => {
+  calendarApi.setOption('height', calculateCalendarHeight())
+}, 200)
+
 onMounted(() => {
   if (!calendarRef.value) {
     return
@@ -78,6 +88,12 @@ onMounted(() => {
       return getEvents(start, end)
     })
   })
+
+  window.addEventListener('resize', handleResizeWindow)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('resize', handleResizeWindow)
 })
 
 function getCategoryColor(categoryId: number) {
