@@ -40,7 +40,7 @@ function saveNote() {
 <template>
   <form @submit="handleSubmit">
     <div class="title">Note</div>
-    <textarea class="content" v-model="form.content" @input="handleChangeContent"></textarea>
+    <textarea class="content font-monospace lh-sm" v-model="form.content" @input="handleChangeContent"></textarea>
     <div>
       <button type="submit" class="btn btn-primary btn-sm" :disabled="isLoading">Save</button>
     </div>
@@ -66,6 +66,7 @@ function saveNote() {
   width: 240px;
   height: 560px;
   margin: var(--vertical-gap) 0;
+  font-size: 12px;
 }
 
 .saved {
