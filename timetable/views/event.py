@@ -10,7 +10,7 @@ from timetable.services import event as event_service
 from timetable.schemas.event import categories_schema, event_schema
 
 
-@app.get('/api/event/categories')
+@app.get("/api/event/categories")
 @auth.login_required
 def get_event_categories() -> Response:
     """
@@ -33,10 +33,10 @@ def get_event_categories() -> Response:
                     items:
                       $ref: '#/components/schemas/Category'
     """
-    return jsonify(categories=categories_schema.dump(CATEGORIES)) # TODO Use schema
+    return jsonify(categories=categories_schema.dump(CATEGORIES))  # TODO Use schema
 
 
-@app.get('/api/event/list')
+@app.get("/api/event/list")
 @auth.login_required
 def get_event_list():
     """
@@ -69,16 +69,16 @@ def get_event_list():
                       $ref: '#/components/schemas/Event'
     """
     try:
-        start = dateutil.parser.parse(request.args['start'])
-        end = dateutil.parser.parse(request.args['end'])
+        start = dateutil.parser.parse(request.args["start"])
+        end = dateutil.parser.parse(request.args["end"])
     except Exception as e:
-        raise AppError('Invalid start or end time.') from e
+        raise AppError("Invalid start or end time.") from e
 
     events = event_service.get_event_list(start, end)
     return jsonify(events=event_schema.dump(events, many=True))
 
 
-@app.post('/api/event/save')
+@app.post("/api/event/save")
 @auth.login_required
 def save_event():
     """
@@ -114,10 +114,10 @@ def save_event():
     event_id = event_service.save(event)
     db.session.commit()
 
-    return jsonify({'id': event_id})
+    return jsonify({"id": event_id})
 
 
-@app.post('/api/event/delete')
+@app.post("/api/event/delete")
 @auth.login_required
 def delete_event() -> Response:
     """
@@ -147,12 +147,12 @@ def delete_event() -> Response:
                   id:
                     type: integer
     """
-    if not request.form.get('id'):
-        raise AppError('ID cannot be empty.')
+    if not request.form.get("id"):
+        raise AppError("ID cannot be empty.")
 
-    row = db.session.query(Event).get(request.form['id'])
+    row = db.session.query(Event).get(request.form["id"])
     if row is None:
-        raise AppError('Event not found.')
+        raise AppError("Event not found.")
 
     row_id = row.id
     db.session.delete(row)

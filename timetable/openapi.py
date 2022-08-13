@@ -8,17 +8,17 @@ from timetable.schemas import event as event_schemas
 from timetable.schemas.note import NoteFormSchema, NoteSchema
 
 spec = APISpec(
-    title='Timetable',
-    version='0.1.0',
-    openapi_version='3.0.2',
-    info={'description': 'What have you done today?'},
-    plugins=[FlaskPlugin(), MarshmallowPlugin()]
+    title="Timetable",
+    version="0.1.0",
+    openapi_version="3.0.2",
+    info={"description": "What have you done today?"},
+    plugins=[FlaskPlugin(), MarshmallowPlugin()],
 )
 
-spec.components.schema('Category', schema=event_schemas.CategorySchema)
-spec.components.schema('Event', schema=event_schemas.EventSchema)
-spec.components.schema('NoteForm', schema=NoteFormSchema)
-spec.components.schema('Note', schema=NoteSchema)
+spec.components.schema("Category", schema=event_schemas.CategorySchema)
+spec.components.schema("Event", schema=event_schemas.EventSchema)
+spec.components.schema("NoteForm", schema=NoteFormSchema)
+spec.components.schema("Note", schema=NoteSchema)
 
 with app.test_request_context():
     spec.path(view=ping)

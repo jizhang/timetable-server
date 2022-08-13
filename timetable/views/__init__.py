@@ -9,7 +9,7 @@ def handle_app_error(error: AppError) -> Response:
     return make_response(str(error), error.status_code)
 
 
-@app.get('/api/ping')
+@app.get("/api/ping")
 def ping() -> Response:
     """
     ---
@@ -27,8 +27,8 @@ def ping() -> Response:
                 type: string
                 example: pong
     """
-    resp = make_response('pong')
-    resp.mimetype = 'text/plain'
+    resp = make_response("pong")
+    resp.mimetype = "text/plain"
     return resp
 
 
