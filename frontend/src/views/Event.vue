@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import dayjs from 'dayjs'
 import debounce from 'just-debounce-it'
-import { ref, reactive, onMounted, onUnmounted } from 'vue'
+import { ref, reactive, computed, onMounted, onUnmounted } from 'vue'
 import { Modal } from 'bootstrap'
 import '@fullcalendar/core/vdom'
 import FullCalendar, { CalendarOptions } from '@fullcalendar/vue3'
@@ -64,6 +64,10 @@ const options: CalendarOptions = {
   eventResize({ event }) {
     updateEventForm(event)
     saveEvent()
+  },
+
+  eventsSet(events) {
+    updateCategoryDurations(events)
   },
 }
 
@@ -190,6 +194,44 @@ onMounted(() => {
     })
   }, 30_000)
 })
+
+const categoryDurations = ref<{
+  title: string
+  duration: string
+}[]>([])
+
+function updateCategoryDurations(events: CalendarEvent[]) {
+  const durations: Record<string, number> = {}
+
+  for (const event of events) {
+    const start = dayjs(event.start)
+    if (!start.isSame(dayjs(), 'day')) {
+      continue
+    }
+
+    const end = dayjs(event.end)
+    const minutes = end.diff(start, 'minutes')
+    const key = String(event.extendedProps.categoryId)
+    if (!(key in durations)) {
+      durations[key] = 0
+    }
+    durations[key] += minutes
+  }
+
+  categoryDurations.value = categories.value.map((category) => {
+    const key = String(category.id)
+    let duration: string
+    if (key in durations) {
+      duration = (durations[key] / 60) + 'h'
+    } else {
+      duration = '-'
+    }
+    return {
+      title: String(category.title),
+      duration,
+    }
+  })
+}
 </script>
 
 <template>
@@ -200,6 +242,15 @@ onMounted(() => {
 
     <div class="note">
       <Note />
+
+      <div style="margin-top: 10px;">
+        <ul class="list-group">
+          <li v-for="item in categoryDurations" :key="item.title" class="list-group-item d-flex justify-content-between align-items-center">
+            {{ item.title }}
+            <span>{{ item.duration }}</span>
+          </li>
+        </ul>
+      </div>
     </div>
 
     <div class="modal" :ref="saveModalRef">

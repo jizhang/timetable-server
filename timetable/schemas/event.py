@@ -1,12 +1,19 @@
 from typing import Any, Optional, Dict
 
-from marshmallow import Schema, fields, validate, validates, validates_schema, ValidationError
+from marshmallow import (
+    Schema,
+    fields,
+    validate,
+    validates,
+    validates_schema,
+    ValidationError,
+)
 
 from timetable import db
 from timetable.consts import CATEGORIES
 from timetable.models.event import Event
 
-DATETIME_FORMAT = '%Y-%m-%d %H:%M:%S'
+DATETIME_FORMAT = "%Y-%m-%d %H:%M:%S"
 
 
 class CategorySchema(Schema):
@@ -17,30 +24,30 @@ class CategorySchema(Schema):
 
 class EventSchema(Schema):
     id = fields.Integer()
-    category_id = fields.Integer(data_key='categoryId', required=True)
+    category_id = fields.Integer(data_key="categoryId", required=True)
     title = fields.String(required=True, validate=validate.Length(min=1))
     start = fields.DateTime(required=True, format=DATETIME_FORMAT)
     end = fields.DateTime(required=True, format=DATETIME_FORMAT)
 
-    @validates('id')
+    @validates("id")
     def validate_id(self, value: Optional[int]):
         if not value:
             return
         event = db.session.query(Event).get(value)
         if event is None:
-            raise ValidationError('Event not found.')
+            raise ValidationError("Event not found.")
 
-    @validates('category_id')
+    @validates("category_id")
     def validate_category_id(self, value: int):
         for category in CATEGORIES:
-            if value == category['id']:
+            if value == category["id"]:
                 return
-        raise ValidationError('Invalid category ID.')
+        raise ValidationError("Invalid category ID.")
 
     @validates_schema
     def validate_schema(self, data: Dict[str, Any], **kwargs):
-        if data['end'] < data['start']:
-            raise ValidationError('Invalid start/end time.')
+        if data["end"] < data["start"]:
+            raise ValidationError("Invalid start/end time.")
 
 
 category_schema = CategorySchema()

@@ -19,7 +19,9 @@ def save(event: Event) -> int:
 
 
 def get_event_list(start: datetime, end: datetime) -> List[Event]:
-    return db.session.query(Event).\
-        filter(Event.start >= start.astimezone(tzlocal())).\
-        filter(Event.start < end.astimezone(tzlocal())).\
-        all()
+    return (
+        db.session.query(Event)
+        .filter(Event.start >= start.astimezone(tzlocal()))
+        .filter(Event.start < end.astimezone(tzlocal()))
+        .all()
+    )
