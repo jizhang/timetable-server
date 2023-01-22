@@ -4,8 +4,8 @@ repos:
   # https://github.com/psf/black/blob/main/.pre-commit-hooks.yaml
   - id: black
     name: black
-    entry: black
+    entry: poetry run black
     language: python
-    language_version: python3.8
+    language_version: python3.10
     require_serial: true
     types_or: [python, pyi]
