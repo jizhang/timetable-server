@@ -25,6 +25,8 @@ python-dotenv = "^0.21.1"
 pylint = "^2.13.8"
 pytest = "^7.1.2"
 mypy = "0.950"
+black = "^22.6.0"
+pre-commit = "^2.20.0"
 
 [[tool.poetry.source]]
 name = "aliyun"
@@ -38,4 +40,4 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.black]
 line-length = 100
-target-version = ['py38']
+target-version = ['py310']
