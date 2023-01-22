@@ -2,12 +2,8 @@
 *.egg-info
 __pycache__
 .mypy_cache
-venv
 application.cfg
 timetable.log
-
-# Javascript
-timetable/static/components/
 
 # Database
 *.db
