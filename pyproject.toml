@@ -1,0 +1,28 @@
+[tool.poetry]
+name = "timetable"
+version = "0.1.0"
+description = ""
+authors = ["Jerry <zhangji87@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "~3.10"
+flask = "^2.1.2"
+flask-sqlalchemy = "^2.5.1"
+flask-httpauth = "^4.6.0"
+sqlalchemy = "~1.4.36"
+apispec = {version = "^5.2.2", extras = ["marshmallow"]}
+apispec-webframeworks = "^0.5.2"
+python-dotenv = "^0.21.1"
+python-dateutil = "^2.8.2"
+
+
+[[tool.poetry.source]]
+name = "aliyun"
+url = "https://mirrors.aliyun.com/pypi/simple/"
+default = true
+secondary = false
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
