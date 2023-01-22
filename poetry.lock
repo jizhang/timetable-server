@@ -874,7 +874,7 @@ name = "setuptools"
 version = "66.1.1"
 description = "Easily download, build, install, upgrade, and uninstall Python packages"
 category = "main"
-optional = true
+optional = false
 python-versions = ">=3.7"
 files = [
     {file = "setuptools-66.1.1-py3-none-any.whl", hash = "sha256:6f590d76b713d5de4e49fe4fbca24474469f53c83632d5d0fd056f7ff7e8112b"},
@@ -1147,4 +1147,4 @@ gunicorn = ["gunicorn"]
 [metadata]
 lock-version = "2.0"
 python-versions = "~3.10"
-content-hash = "395895b1bb2f8597fe0d4eb76d9f87f15bb0a8336ec42133b8bbd3fad38f8364"
+content-hash = "3ee17325024d35ed1700ca4c9131d3f4bc001a4064b6e3b32ae4b0d1b4817b17"

@@ -1,14 +1,14 @@
 default: web
 
 dev:
-	pip install -r requirements.txt -r requirements-dev.txt
+	poetry install
 
 web:
-	flask run
+	poetry run flask run
 
 gen:
-	flask gen
+	poetry run flask gen
 
 test:
-	pylint timetable
-	mypy timetable
+	poetry run pylint timetable
+	poetry run mypy timetable

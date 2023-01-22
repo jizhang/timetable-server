@@ -10,15 +10,16 @@ gunicorn = ["gunicorn"]
 
 [tool.poetry.dependencies]
 python = "~3.10"
-flask = "^2.1.2"
+flask = "^2.2.2"
 flask-sqlalchemy = "^2.5.1"
 flask-httpauth = "^4.6.0"
 sqlalchemy = "~1.4.36"
 apispec = {version = "^5.2.2", extras = ["marshmallow"]}
 apispec-webframeworks = "^0.5.2"
-python-dotenv = "^0.21.1"
 python-dateutil = "^2.8.2"
 gunicorn = {version = "^20.1.0", optional = true}
+setuptools = "^66.1.1"
+python-dotenv = "^0.21.1"
 
 [tool.poetry.group.dev.dependencies]
 pylint = "^2.13.8"
