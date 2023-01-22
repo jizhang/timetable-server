@@ -5,7 +5,7 @@ from timetable.openapi import spec
 
 
 @app.cli.command()
-def gen():
+def gen() -> None:
     spec_path = Path(__file__).parent.joinpath("../../openapi.yaml").resolve()
     with open(spec_path, "w", encoding="utf-8") as f:
         f.write("# DO NOT EDIT\n")
