@@ -18,7 +18,10 @@ jobs:
         with:
           python-version: ${{ env.PYTHON_VERSION }}
           cache: poetry
-      - run: poetry install
+      - name: Install dependencies
+        run: |
+          poetry config virtualenvs.in-project true
+          poetry install
       - run: poetry run ruff timetable
       - run: poetry run mypy timetable
 
