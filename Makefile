@@ -11,5 +11,5 @@ gen:
 	poetry run flask gen
 
 test:
-	poetry run pylint timetable
+	poetry run ruff timetable
 	poetry run mypy timetable

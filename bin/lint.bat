@@ -1,2 +1,0 @@
-pylint timetable && ^
-mypy timetable

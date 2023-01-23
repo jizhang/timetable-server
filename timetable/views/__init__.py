@@ -32,6 +32,5 @@ def ping() -> Response:
     return resp
 
 
-# pylint: disable=cyclic-import,wrong-import-position
 import timetable.views.event
 import timetable.views.note
