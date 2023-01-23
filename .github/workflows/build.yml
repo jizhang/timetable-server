@@ -13,15 +13,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - run: pipx install poetry==${{ env.POETRY_VERSION }}
+      - name: Install poetry
+        run: |
+          pipx install poetry==${{ env.POETRY_VERSION }}
+          poetry config virtualenvs.in-project true
       - uses: actions/setup-python@v4
         with:
           python-version: ${{ env.PYTHON_VERSION }}
           cache: poetry
-      - name: Install dependencies
-        run: |
-          poetry config virtualenvs.in-project true
-          poetry install
+      - run: poetry install
       - run: poetry run ruff timetable
       - run: poetry run mypy timetable
 
@@ -31,15 +31,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - run: pipx install poetry==${{ env.POETRY_VERSION }}
+      - name: Install poetry
+        run: |
+          pipx install poetry==${{ env.POETRY_VERSION }}
+          poetry config virtualenvs.in-project true
       - uses: actions/setup-python@v4
         with:
           python-version: ${{ env.PYTHON_VERSION }}
           cache: poetry
-      - name: Install dependencies
-        run: |
-          poetry config virtualenvs.in-project true
-          poetry install --extras gunicorn --without dev
+      - run: poetry install --extras gunicorn --without dev
       - uses: docker/login-action@v2
         with:
           registry: ${{ env.REGISTRY }}
