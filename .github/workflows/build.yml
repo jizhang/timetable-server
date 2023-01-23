@@ -23,7 +23,7 @@ jobs:
       - run: poetry run mypy timetable
 
   build:
-    # if: github.ref == 'refs/heads/master'
+    if: github.ref == 'refs/heads/master'
     needs: test
     runs-on: ubuntu-latest
     steps:
