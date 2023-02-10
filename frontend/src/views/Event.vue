@@ -153,7 +153,7 @@ function saveEvent() {
         ...eventForm,
         id: String(response.id),
         color: getCategoryColor(eventForm.categoryId),
-      })
+      }, true)
     } else {
       const event = calendarApi.getEventById(String(eventForm.id))
       event?.setProp('title', eventForm.title)
