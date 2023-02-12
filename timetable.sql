@@ -1,15 +1,15 @@
-create table note (
-  id integer primary key
-  ,content text
-  ,created datetime
+CREATE TABLE note (
+    id INTEGER PRIMARY KEY
+    ,content TEXT
+    ,created DATETIME
 );
 
-create table event (
-  id integer primary key
-  ,title text
-  ,category_id int
-  ,start datetime
-  ,end datetime
-  ,created datetime
-  ,updated datetime
+CREATE TABLE event (
+    id INTEGER PRIMARY KEY
+    ,title TEXT
+    ,category_id INT
+    ,start DATETIME
+    ,end DATETIME
+    ,created DATETIME
+    ,updated DATETIME
 );

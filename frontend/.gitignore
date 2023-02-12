@@ -1,8 +1,0 @@
-# JavaScript
-node_modules/
-dist/
-*.local
-
-# Misc
-.DS_Store
-.vscode/
