@@ -91,7 +91,7 @@ def save_event():
       requestBody:
         required: true
         content:
-          application/x-www-form-urlencoded:
+          application/json:
             schema:
               $ref: '#/components/schemas/Event'
       responses:
@@ -106,7 +106,7 @@ def save_event():
                     type: integer
     """
     try:
-        event_form = event_schema.load(request.form)
+        event_form = event_schema.load(request.json)
     except ValidationError as e:
         raise AppError(e.messages)
 

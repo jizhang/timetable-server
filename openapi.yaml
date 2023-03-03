@@ -50,7 +50,7 @@ paths:
       requestBody:
         required: true
         content:
-          application/x-www-form-urlencoded:
+          application/json:
             schema:
               $ref: '#/components/schemas/Event'
       responses:
@@ -159,25 +159,25 @@ components:
       properties:
         title:
           type: string
-        id:
-          type: integer
         color:
           type: string
+        id:
+          type: integer
     Event:
       type: object
       properties:
-        start:
-          type: string
-          format: date-time
+        categoryId:
+          type: integer
         title:
           type: string
           minLength: 1
-        id:
-          type: integer
         end:
           type: string
           format: date-time
-        categoryId:
+        start:
+          type: string
+          format: date-time
+        id:
           type: integer
       required:
       - categoryId
@@ -192,8 +192,8 @@ components:
     Note:
       type: object
       properties:
+        content:
+          type: string
         created:
           type: string
           format: date-time
-        content:
-          type: string

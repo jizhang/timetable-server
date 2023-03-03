@@ -13,8 +13,6 @@ from timetable import db
 from timetable.consts import CATEGORIES
 from timetable.models.event import Event
 
-DATETIME_FORMAT = "%Y-%m-%d %H:%M:%S"
-
 
 class CategorySchema(Schema):
     id = fields.Integer()
@@ -26,8 +24,8 @@ class EventSchema(Schema):
     id = fields.Integer()
     category_id = fields.Integer(data_key="categoryId", required=True)
     title = fields.String(required=True, validate=validate.Length(min=1))
-    start = fields.DateTime(required=True, format=DATETIME_FORMAT)
-    end = fields.DateTime(required=True, format=DATETIME_FORMAT)
+    start = fields.DateTime(required=True)
+    end = fields.DateTime(required=True)
 
     @validates("id")
     def validate_id(self, value: Optional[int]):
