@@ -50,11 +50,13 @@ def get_event_list():
         - in: query
           name: start
           schema:
-            type: datetime
+            type: string
+            format: date-time
         - in: query
           name: end
           schema:
-            type: datetime
+            type: string
+            format: date-time
       responses:
         '200':
           description: OK
