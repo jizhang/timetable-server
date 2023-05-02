@@ -10,7 +10,7 @@ gunicorn = ["gunicorn"]
 
 [tool.poetry.dependencies]
 python = "~3.10"
-flask = "^2.2.2"
+flask = "^2.3.2"
 flask-sqlalchemy = "^2.5.1"
 flask-httpauth = "^4.6.0"
 sqlalchemy = "~1.4.36"
