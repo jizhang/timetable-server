@@ -13,7 +13,6 @@ def save(event: Event) -> int:
 
     event.start = event.start.astimezone(tzlocal())
     event.end = event.end.astimezone(tzlocal())
-    event.updated = datetime.now()
     saved_event = db.session.merge(event)
     db.session.flush()
 

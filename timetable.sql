@@ -1,15 +1,16 @@
-CREATE TABLE note (
-    id INTEGER PRIMARY KEY
-    ,content TEXT
-    ,created DATETIME
+create table event (
+  id int not null primary key auto_increment
+  ,title varchar(2000) not null
+  ,category_id int not null
+  ,`start` datetime not null
+  ,`end` datetime not null
+  ,created datetime not null
+  ,updated timestamp not null default current_timestamp on update current_timestamp
+  ,index idx_start (`start`)
 );
 
-CREATE TABLE event (
-    id INTEGER PRIMARY KEY
-    ,title TEXT
-    ,category_id INT
-    ,start DATETIME
-    ,end DATETIME
-    ,created DATETIME
-    ,updated DATETIME
+create table note (
+  id int not null primary key auto_increment
+  ,content text not null
+  ,created datetime not null
 );
