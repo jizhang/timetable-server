@@ -4,11 +4,10 @@ from apispec_webframeworks.flask import FlaskPlugin
 
 from timetable import app
 from timetable.views import ping, user as user_view, event as event_view, note as note_view
-from timetable.views.event import get_event_categories
 from timetable.schemas import event as event_schemas
 from timetable.schemas.note import NoteFormSchema, NoteSchema
-from timetable.views.user.schemas.login_form import LoginFormSchema
-from timetable.views.user.schemas.current_user import CurrentUserSchema
+from timetable.schemas.login_form import LoginFormSchema
+from timetable.schemas.current_user import CurrentUserSchema
 
 spec = APISpec(
     title="Timetable",
@@ -26,9 +25,10 @@ spec.components.schema("NoteForm", schema=NoteFormSchema)
 spec.components.schema("Note", schema=NoteSchema)
 
 with app.test_request_context():
+    # type: ignore
     spec.path(view=ping)
-    spec.path(view=user_view.index.user_login)
-    spec.path(view=get_event_categories)
+    spec.path(view=user_view.user_login)
+    spec.path(view=event_view.get_event_categories)
     spec.path(view=event_view.save_event)
     spec.path(view=event_view.get_event_list)
     spec.path(view=event_view.delete_event)

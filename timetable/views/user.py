@@ -5,8 +5,8 @@ from marshmallow import ValidationError
 
 from timetable import app, AppError
 from timetable.services import user as user_svc
-from .schemas.login_form import login_form_schema
-from .schemas.current_user import current_user_schema
+from timetable.schemas.login_form import login_form_schema
+from timetable.schemas.current_user import current_user_schema
 
 
 @app.post("/api/user/login")
