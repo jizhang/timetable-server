@@ -1,9 +1,10 @@
 import dateutil.parser
 
 from flask import request, jsonify, Response
+from flask_login import login_required
 from marshmallow import ValidationError
 
-from timetable import app, db, auth, AppError
+from timetable import app, db, AppError
 from timetable.consts import CATEGORIES
 from timetable.models.event import Event
 from timetable.services import event as event_service
@@ -11,7 +12,7 @@ from timetable.schemas.event import categories_schema, event_schema
 
 
 @app.get("/api/event/categories")
-@auth.login_required
+@login_required
 def get_event_categories() -> Response:
     """
     ---
@@ -37,7 +38,7 @@ def get_event_categories() -> Response:
 
 
 @app.get("/api/event/list")
-@auth.login_required
+@login_required
 def get_event_list():
     """
     ---
@@ -81,7 +82,7 @@ def get_event_list():
 
 
 @app.post("/api/event/save")
-@auth.login_required
+@login_required
 def save_event():
     """
     ---
@@ -110,7 +111,7 @@ def save_event():
     try:
         event_form = event_schema.load(request.json)
     except ValidationError as e:
-        raise AppError(e.messages)
+        raise AppError(str(e.messages))
 
     event = Event(**event_form)
     event_id = event_service.save(event)
@@ -120,7 +121,7 @@ def save_event():
 
 
 @app.post("/api/event/delete")
-@auth.login_required
+@login_required
 def delete_event() -> Response:
     """
     ---

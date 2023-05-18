@@ -1,14 +1,15 @@
 from flask import request
+from flask_login import login_required
 from marshmallow import ValidationError
 
-from timetable import app, db, auth, AppError
+from timetable import app, db, AppError
 from timetable.models.note import Note
 from timetable.services import note as note_service
 from timetable.schemas.note import note_form_schema, note_schema
 
 
 @app.get("/api/note/content")
-@auth.login_required
+@login_required
 def get_note_content() -> dict:
     """
     ---
@@ -30,7 +31,7 @@ def get_note_content() -> dict:
 
 
 @app.post("/api/note/save")
-@auth.login_required
+@login_required
 def save_note() -> dict:
     """
     ---
@@ -56,7 +57,7 @@ def save_note() -> dict:
     try:
         note_form = note_form_schema.load(request.form)
     except ValidationError as e:
-        raise AppError(e.messages)
+        raise AppError(str(e.messages))
 
     note = Note(**note_form)
     note_service.save(note)

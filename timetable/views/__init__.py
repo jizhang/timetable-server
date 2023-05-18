@@ -1,12 +1,17 @@
-from flask import make_response, Response
-from timetable import app, AppError
+from typing import Tuple
 
-InvalidUsage = AppError
+from flask import make_response, Response, jsonify
+
+from timetable import app, AppError
 
 
 @app.errorhandler(AppError)
-def handle_app_error(error: AppError) -> Response:
-    return make_response(str(error), error.status_code)
+def handle_app_error(error: AppError) -> Tuple[Response, int]:
+    payload = {
+        "code": error.code,
+        "message": error.message,
+    }
+    return jsonify(payload), 400
 
 
 @app.get("/api/ping")
@@ -32,5 +37,6 @@ def ping() -> Response:
     return resp
 
 
+import timetable.views.user
 import timetable.views.event
 import timetable.views.note
