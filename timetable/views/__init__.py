@@ -32,5 +32,6 @@ def ping() -> Response:
     return resp
 
 
+import timetable.views.user
 import timetable.views.event
 import timetable.views.note

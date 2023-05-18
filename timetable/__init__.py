@@ -1,24 +1,25 @@
-from typing import Any
+from typing import Any, Optional
 
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-from flask_httpauth import HTTPBasicAuth
-from werkzeug.security import check_password_hash
+from flask_login import LoginManager
 
 app = Flask(__name__)
 app.config.from_object("timetable.default_settings")
 app.config.from_envvar("TIMETABLE_SETTINGS", silent=True)
 
 db: Any = SQLAlchemy(app)
-auth = HTTPBasicAuth()
+
+# Configure login
+login_manager = LoginManager(app)
+
+from timetable.models.user import User
+from timetable.services import user as user_svc
 
 
-@auth.verify_password
-def verify_password(username, password):
-    password_hash = app.config["USERS"].get(username)
-    if password_hash is not None:
-        return check_password_hash(password_hash, password)
-    return False
+@login_manager.user_loader
+def load_user(user_id: str) -> Optional[User]:
+    return user_svc.get_user(user_id)
 
 
 class AppError(Exception):

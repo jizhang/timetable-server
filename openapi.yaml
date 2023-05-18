@@ -21,6 +21,26 @@ paths:
               schema:
                 type: string
                 example: pong
+  /api/user/login:
+    post:
+      summary: User login
+      tags:
+      - user
+      x-swagger-router-controller: timetable.views.user.index
+      operationId: user_login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginForm'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CurrentUser'
   /api/event/categories:
     get:
       summary: Get event categories.
@@ -156,29 +176,46 @@ paths:
 openapi: 3.0.2
 components:
   schemas:
+    LoginForm:
+      type: object
+      properties:
+        password:
+          type: string
+        username:
+          type: string
+      required:
+      - password
+      - username
+    CurrentUser:
+      type: object
+      properties:
+        id:
+          type: integer
+        username:
+          type: string
     Category:
       type: object
       properties:
-        color:
+        title:
           type: string
         id:
           type: integer
-        title:
+        color:
           type: string
     Event:
       type: object
       properties:
-        end:
-          type: string
-          format: date-time
         id:
           type: integer
-        start:
-          type: string
-          format: date-time
         title:
           type: string
           minLength: 1
+        start:
+          type: string
+          format: date-time
+        end:
+          type: string
+          format: date-time
         categoryId:
           type: integer
       required:
