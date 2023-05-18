@@ -9,7 +9,7 @@ readme = "README.md"
 gunicorn = ["gunicorn"]
 
 [tool.poetry.dependencies]
-python = "~3.10"
+python = "^3.10"
 flask = "^2.3.2"
 flask-sqlalchemy = "^2.5.1"
 flask-httpauth = "^4.6.0"
