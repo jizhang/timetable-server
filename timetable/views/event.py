@@ -111,7 +111,7 @@ def save_event():
     try:
         event_form = event_schema.load(request.json)
     except ValidationError as e:
-        raise AppError(e.messages)
+        raise AppError(str(e.messages))
 
     event = Event(**event_form)
     event_id = event_service.save(event)

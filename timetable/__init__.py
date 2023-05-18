@@ -23,7 +23,10 @@ def load_user(user_id: str) -> Optional[User]:
 
 
 class AppError(Exception):
-    status_code = 400
+    def __init__(self, message: str, code=400):
+        super().__init__(message)
+        self.message = message
+        self.code = code
 
 
 import timetable.views

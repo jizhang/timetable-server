@@ -57,7 +57,7 @@ def save_note() -> dict:
     try:
         note_form = note_form_schema.load(request.form)
     except ValidationError as e:
-        raise AppError(e.messages)
+        raise AppError(str(e.messages))
 
     note = Note(**note_form)
     note_service.save(note)
