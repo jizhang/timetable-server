@@ -26,7 +26,6 @@ spec.components.schema("NoteForm", schema=NoteFormSchema)
 spec.components.schema("Note", schema=NoteSchema)
 
 with app.test_request_context():
-    # type: ignore
     spec.path(view=ping)
     spec.path(view=user_view.user_login)
     spec.path(view=event_view.get_event_categories)

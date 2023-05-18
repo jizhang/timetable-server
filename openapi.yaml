@@ -26,7 +26,7 @@ paths:
       summary: User login
       tags:
       - user
-      x-swagger-router-controller: timetable.views.user.index
+      x-swagger-router-controller: timetable.views.user
       operationId: user_login
       requestBody:
         required: true
@@ -198,28 +198,28 @@ components:
     Category:
       type: object
       properties:
-        title:
-          type: string
-        color:
-          type: string
         id:
           type: integer
+        color:
+          type: string
+        title:
+          type: string
     Event:
       type: object
       properties:
-        categoryId:
-          type: integer
-        start:
+        title:
           type: string
-          format: date-time
+          minLength: 1
         id:
+          type: integer
+        categoryId:
           type: integer
         end:
           type: string
           format: date-time
-        title:
+        start:
           type: string
-          minLength: 1
+          format: date-time
       required:
       - categoryId
       - end
@@ -233,8 +233,8 @@ components:
     Note:
       type: object
       properties:
+        content:
+          type: string
         created:
           type: string
           format: date-time
-        content:
-          type: string

@@ -16,7 +16,7 @@ def user_login() -> Response:
     post:
       summary: User login
       tags: [user]
-      x-swagger-router-controller: timetable.views.user.index
+      x-swagger-router-controller: timetable.views.user
       operationId: user_login
       requestBody:
         required: true
