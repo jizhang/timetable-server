@@ -1,5 +1,5 @@
 from flask import request
-from flask_login import login_required
+from flask_login import login_required, current_user
 from marshmallow import ValidationError
 
 from timetable import app, db, AppError
@@ -26,7 +26,7 @@ def get_note_content() -> dict:
               schema:
                 $ref: '#/components/schemas/NoteForm'
     """
-    content = note_service.get_note_content()
+    content = note_service.get_note_content(current_user.id)
     return note_form_schema.dump({"content": content})
 
 
@@ -43,7 +43,7 @@ def save_note() -> dict:
       requestBody:
         required: true
         content:
-          application/x-www-form-urlencoded:
+          application/json:
             schema:
               $ref: '#/components/schemas/NoteForm'
       responses:
@@ -59,7 +59,7 @@ def save_note() -> dict:
     except ValidationError as e:
         raise AppError(str(e.messages))
 
-    note = Note(**note_form)
+    note = Note(**note_form, user_id=current_user.id)
     note_service.save(note)
     db.session.commit()
 

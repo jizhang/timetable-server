@@ -1,14 +1,14 @@
 import dateutil.parser
 
 from flask import request, jsonify, Response
-from flask_login import login_required
+from flask_login import login_required, current_user
 from marshmallow import ValidationError
 
 from timetable import app, db, AppError
 from timetable.consts import CATEGORIES
 from timetable.models.event import Event
 from timetable.services import event as event_service
-from timetable.schemas.event import categories_schema, event_schema
+from timetable.schemas.event import categories_schema, event_schema, event_id_schema
 
 
 @app.get("/api/event/categories")
@@ -77,7 +77,7 @@ def get_event_list():
     except Exception as e:
         raise AppError("Invalid start or end time.") from e
 
-    events = event_service.get_event_list(start, end)
+    events = event_service.get_event_list(current_user.id, start, end)
     return jsonify(events=event_schema.dump(events, many=True))
 
 
@@ -113,7 +113,7 @@ def save_event():
     except ValidationError as e:
         raise AppError(str(e.messages))
 
-    event = Event(**event_form)
+    event = Event(**event_form, user_id=current_user.id)
     event_id = event_service.save(event)
     db.session.commit()
 
@@ -133,7 +133,7 @@ def delete_event() -> Response:
       requestBody:
         required: true
         content:
-          application/x-www-form-urlencoded:
+          application/json:
             schema:
               type: object
               properties:
@@ -150,12 +150,10 @@ def delete_event() -> Response:
                   id:
                     type: integer
     """
-    if not request.form.get("id"):
-        raise AppError("ID cannot be empty.")
-
-    row = db.session.query(Event).get(request.form["id"])
-    if row is None:
-        raise AppError("Event not found.")
+    try:
+        row = event_id_schema.load(request.json)  # type: ignore
+    except ValidationError as e:
+        raise AppError(str(e.messages))
 
     row_id = row.id
     db.session.delete(row)
