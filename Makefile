@@ -13,3 +13,6 @@ gen:
 test:
 	poetry run ruff timetable
 	poetry run mypy timetable
+
+prod:
+	poetry install --extras gunicorn --without dev

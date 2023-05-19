@@ -4,10 +4,15 @@ What have you done today?
 
 ## Development
 
+Install Python 3.10+ and Poetry.
+
 ```
-poetry env use 3.10
 make dev
 make
 ```
 
-Browse http://127.0.0.1:5001/
+## Production
+
+```
+make prod
+```
