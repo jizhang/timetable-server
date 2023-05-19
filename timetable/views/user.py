@@ -1,4 +1,4 @@
-from flask import Response, jsonify, request
+from flask import Response, request
 from flask_login import login_user
 from werkzeug.security import check_password_hash
 from marshmallow import ValidationError
@@ -32,11 +32,8 @@ def user_login() -> Response:
               schema:
                 $ref: '#/components/schemas/CurrentUser'
     """
-    if not isinstance(request.json, dict):
-        raise AppError("Invalid request body")
-
     try:
-        form = login_form_schema.load(request.json)
+        form = login_form_schema.load(request.json)  # type: ignore
     except ValidationError as e:
         raise AppError(str(e.messages))
 
@@ -48,4 +45,4 @@ def user_login() -> Response:
         raise AppError("Invalid password")
 
     login_user(user, remember=True)
-    return jsonify(current_user_schema.dump(user))
+    return current_user_schema.dump(user)

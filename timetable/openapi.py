@@ -22,6 +22,7 @@ spec.components.schema("LoginForm", schema=LoginFormSchema)
 spec.components.schema("CurrentUser", schema=CurrentUserSchema)
 spec.components.schema("Category", schema=event_schemas.CategorySchema)
 spec.components.schema("Event", schema=event_schemas.EventSchema)
+spec.components.schema("EventId", schema=event_schemas.EventIdSchema)
 spec.components.schema("NoteForm", schema=NoteFormSchema)
 spec.components.schema("Note", schema=NoteSchema)
 

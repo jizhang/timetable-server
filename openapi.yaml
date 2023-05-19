@@ -125,10 +125,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                id:
-                  type: number
+              $ref: '#/components/schemas/EventId'
       responses:
         '200':
           description: OK
@@ -198,10 +195,10 @@ components:
     Category:
       type: object
       properties:
-        id:
-          type: integer
         color:
           type: string
+        id:
+          type: integer
         title:
           type: string
     Event:
@@ -225,6 +222,13 @@ components:
       - end
       - start
       - title
+    EventId:
+      type: object
+      properties:
+        id:
+          type: integer
+      required:
+      - id
     NoteForm:
       type: object
       properties:
@@ -233,8 +237,8 @@ components:
     Note:
       type: object
       properties:
-        content:
-          type: string
         created:
           type: string
           format: date-time
+        content:
+          type: string

@@ -34,12 +34,12 @@ def get_event_categories() -> Response:
                     items:
                       $ref: '#/components/schemas/Category'
     """
-    return jsonify(categories=categories_schema.dump(CATEGORIES))  # TODO Use schema
+    return jsonify(categories=categories_schema.dump(CATEGORIES))
 
 
 @app.get("/api/event/list")
 @login_required
-def get_event_list():
+def get_event_list() -> Response:
     """
     ---
     get:
@@ -83,7 +83,7 @@ def get_event_list():
 
 @app.post("/api/event/save")
 @login_required
-def save_event():
+def save_event() -> Response:
     """
     ---
     post:
@@ -109,7 +109,7 @@ def save_event():
                     type: integer
     """
     try:
-        event_form = event_schema.load(request.json)
+        event_form = event_schema.load(request.json)  # type: ignore
     except ValidationError as e:
         raise AppError(str(e.messages))
 
@@ -117,7 +117,7 @@ def save_event():
     event_id = event_service.save(event)
     db.session.commit()
 
-    return jsonify({"id": event_id})
+    return jsonify(id=event_id)
 
 
 @app.post("/api/event/delete")
@@ -135,10 +135,7 @@ def delete_event() -> Response:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                id:
-                  type: number
+              $ref: '#/components/schemas/EventId'
       responses:
         '200':
           description: OK
