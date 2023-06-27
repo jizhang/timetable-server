@@ -30,4 +30,4 @@ class AppError(Exception):
 
 
 import timetable.views
-import timetable.commands.gen
+import timetable.commands
