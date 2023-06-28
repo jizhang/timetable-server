@@ -1,5 +1,6 @@
-from typing import Optional, List
 from datetime import datetime
+from typing import List, Optional
+
 from dateutil.tz import tzlocal
 
 from timetable import db

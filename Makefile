@@ -10,7 +10,7 @@ gen:
 	poetry run flask gen
 
 test:
-	poetry run ruff timetable
+	poetry run ruff --fix timetable
 	poetry run mypy timetable
 
 prod:

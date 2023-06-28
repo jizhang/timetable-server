@@ -1,14 +1,14 @@
-from typing import Any, Optional, Dict
+from typing import Any, Dict, Optional
 
 from flask_login import current_user
 from marshmallow import (
     Schema,
+    ValidationError,
     fields,
+    post_load,
     validate,
     validates,
     validates_schema,
-    ValidationError,
-    post_load,
 )
 
 from timetable import db
@@ -25,30 +25,30 @@ class CategorySchema(Schema):
 
 class EventSchema(Schema):
     id = fields.Integer()
-    category_id = fields.Integer(data_key="categoryId", required=True)
+    category_id = fields.Integer(data_key='categoryId', required=True)
     title = fields.String(required=True, validate=validate.Length(min=1))
     start = fields.DateTime(required=True)
     end = fields.DateTime(required=True)
 
-    @validates("id")
+    @validates('id')
     def validate_id(self, value: Optional[int]):
         if not value:
             return
         event = db.session.query(Event).get(value)
         if event is None:
-            raise ValidationError("Event not found.")
+            raise ValidationError('Event not found.')
 
-    @validates("category_id")
+    @validates('category_id')
     def validate_category_id(self, value: int):
         for category in CATEGORIES:
-            if value == category["id"]:
+            if value == category['id']:
                 return
-        raise ValidationError("Invalid category ID.")
+        raise ValidationError('Invalid category ID.')
 
     @validates_schema
     def validate_schema(self, data: Dict[str, Any], **kwargs):
-        if data["end"] < data["start"]:
-            raise ValidationError("Invalid start/end time.")
+        if data['end'] < data['start']:
+            raise ValidationError('Invalid start/end time.')
 
 
 class EventIdSchema(Schema):
@@ -56,9 +56,9 @@ class EventIdSchema(Schema):
 
     @post_load
     def make_event(self, data, **kwargs):
-        row = event_svc.get_event(current_user.id, data["id"])
+        row = event_svc.get_event(current_user.id, data['id'])
         if row is None:
-            raise ValidationError("Event not found")
+            raise ValidationError('Event not found')
         return row
 
 

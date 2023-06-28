@@ -1,14 +1,14 @@
-from flask import request, Response
-from flask_login import login_required, current_user
+from flask import Response, request
+from flask_login import current_user, login_required
 from marshmallow import ValidationError
 
-from timetable import app, db, AppError
+from timetable import AppError, app, db
 from timetable.models.note import Note
-from timetable.services import note as note_service
 from timetable.schemas.note import note_form_schema, note_schema
+from timetable.services import note as note_service
 
 
-@app.get("/api/note/content")
+@app.get('/api/note/content')
 @login_required
 def get_note_content() -> Response:
     """
@@ -27,10 +27,10 @@ def get_note_content() -> Response:
                 $ref: '#/components/schemas/NoteForm'
     """
     content = note_service.get_note_content(current_user.id)
-    return note_form_schema.dump({"content": content})
+    return note_form_schema.dump({'content': content})
 
 
-@app.post("/api/note/save")
+@app.post('/api/note/save')
 @login_required
 def save_note() -> Response:
     """
@@ -57,7 +57,7 @@ def save_note() -> Response:
     try:
         note_form = note_form_schema.load(request.json)  # type: ignore
     except ValidationError as e:
-        raise AppError(str(e.messages))
+        raise AppError(str(e.messages)) from e
 
     note = Note(**note_form, user_id=current_user.id)
     note_service.save(note)

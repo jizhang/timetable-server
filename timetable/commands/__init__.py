@@ -1,2 +1,1 @@
-from . import gen
-from . import archive_notes
+from . import archive_notes, gen

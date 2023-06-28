@@ -1,8 +1,8 @@
 from datetime import datetime
 
 import click
-from sqlalchemy import func
 from dateutil.relativedelta import relativedelta
+from sqlalchemy import func
 
 from timetable import app, db
 from timetable.models.note import Note

@@ -1,5 +1,5 @@
-from typing import List
 from datetime import datetime
+from typing import List
 
 from sqlalchemy import delete
 
@@ -14,7 +14,7 @@ def get_note_content(user_id: int) -> str:
         .order_by(Note.id.desc())
         .first()
     )
-    return note.content if note is not None else ""
+    return note.content if note is not None else ''
 
 
 def save(note: Note):
@@ -26,5 +26,5 @@ def delete_by_ids(ids: List[int]):
     for chunk in utils.chunks(ids, 100):
         db.session.execute(
             delete(Note)
-            .where(Note.id.in_(chunk))
+            .where(Note.id.in_(chunk)),
         )

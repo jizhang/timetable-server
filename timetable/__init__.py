@@ -1,12 +1,12 @@
 from typing import Any, Optional
 
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
+from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
-app.config.from_object("timetable.default_settings")
-app.config.from_envvar("TIMETABLE_SETTINGS", silent=True)
+app.config.from_object('timetable.default_settings')
+app.config.from_envvar('TIMETABLE_SETTINGS', silent=True)
 
 db: Any = SQLAlchemy(app)
 
@@ -29,5 +29,5 @@ class AppError(Exception):
         self.code = code
 
 
-import timetable.views
 import timetable.commands
+import timetable.views
