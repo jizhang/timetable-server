@@ -1,7 +1,7 @@
-from typing import Iterator
+from typing import Iterator, Sequence
 
 
-def chunks(data: list, n: int) -> Iterator[list]:
+def chunks(data: Sequence, n: int) -> Iterator[Sequence]:
     """
     Yield successive n-sized chunks from l.
     :param l: list
