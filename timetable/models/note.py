@@ -1,8 +1,14 @@
-from timetable import db
+from datetime import datetime
+
+from sqlalchemy.orm import Mapped, mapped_column
+
+from . import Base
 
 
-class Note(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer)
-    content = db.Column(db.String)
-    created = db.Column(db.DateTime)
+class Note(Base):
+    __tablename__ = 'note'
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    user_id: Mapped[int]
+    content: Mapped[str]
+    created: Mapped[datetime]

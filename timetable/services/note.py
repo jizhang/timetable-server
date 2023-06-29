@@ -1,20 +1,19 @@
 from datetime import datetime
-from typing import List
+from typing import Optional, Sequence
 
-from sqlalchemy import delete
+from sqlalchemy import delete, select
 
 from timetable import db, utils
 from timetable.models.note import Note
 
 
 def get_note_content(user_id: int) -> str:
-    note = (
-        db.session.query(Note)
+    note_content: Optional[str] = db.session.scalar(
+        select(Note.content)
         .filter_by(user_id=user_id)
-        .order_by(Note.id.desc())
-        .first()
+        .order_by(Note.id.desc()),
     )
-    return note.content if note is not None else ''
+    return note_content or ''
 
 
 def save(note: Note):
@@ -22,7 +21,7 @@ def save(note: Note):
     db.session.add(note)
 
 
-def delete_by_ids(ids: List[int]):
+def delete_by_ids(ids: Sequence[int]):
     for chunk in utils.chunks(ids, 100):
         db.session.execute(
             delete(Note)
