@@ -1,4 +1,4 @@
-from typing import Any, Optional
+from typing import Optional
 
 from flask import Flask
 from flask_login import LoginManager
@@ -8,7 +8,7 @@ app = Flask(__name__)
 app.config.from_object('timetable.default_settings')
 app.config.from_envvar('TIMETABLE_SETTINGS', silent=True)
 
-db: Any = SQLAlchemy(app)
+db = SQLAlchemy(app)
 
 # Configure login
 login_manager = LoginManager(app)

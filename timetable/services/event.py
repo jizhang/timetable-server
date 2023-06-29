@@ -13,7 +13,6 @@ def get_event(user_id: int, event_id: int) -> Optional[Event]:
 
 def save(event: Event) -> int:
     if not event.id:
-        event.id = None
         event.created = datetime.now()
 
     event.start = event.start.astimezone(tzlocal())

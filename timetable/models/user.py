@@ -1,11 +1,16 @@
+from datetime import datetime
+
 from flask_login import UserMixin
+from sqlalchemy.orm import Mapped, mapped_column
 
-from timetable import db
+from . import Base
 
 
-class User(db.Model, UserMixin):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String)
-    password = db.Column(db.String)
-    created_at = db.Column(db.DateTime)
-    updated_at = db.Column(db.DateTime)
+class User(Base, UserMixin):
+    __tablename__ = 'user'
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    username: Mapped[str]
+    password: Mapped[str]
+    created_at: Mapped[datetime]
+    updated_at: Mapped[datetime]
