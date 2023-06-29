@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import List, Optional
+from typing import Iterable, Optional
 
 from sqlalchemy import delete, select
 
@@ -21,8 +21,8 @@ def save(note: Note):
     db.session.add(note)
 
 
-def delete_by_ids(ids: List[int]):
-    for chunk in utils.chunks(ids, 100):
+def delete_by_ids(ids: Iterable[int]):
+    for chunk in utils.chunks(list(ids), 100):
         db.session.execute(
             delete(Note)
             .where(Note.id.in_(chunk)),
