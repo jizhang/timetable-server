@@ -34,7 +34,7 @@ class EventSchema(Schema):
     def validate_id(self, value: Optional[int]):
         if not value:
             return
-        event = db.session.query(Event).get(value)
+        event = db.session.get(Event, value)
         if event is None:
             raise ValidationError('Event not found.')
 

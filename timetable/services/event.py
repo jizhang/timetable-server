@@ -1,14 +1,18 @@
 from datetime import datetime
-from typing import List, Optional
+from typing import Optional, Sequence
 
 from dateutil.tz import tzlocal
+from sqlalchemy import select
 
 from timetable import db
 from timetable.models.event import Event
 
 
 def get_event(user_id: int, event_id: int) -> Optional[Event]:
-    return db.session.query(Event).filter_by(user_id=user_id, id=event_id).first()
+    return db.session.scalar(
+        select(Event)
+        .filter_by(user_id=user_id, id=event_id),
+    )
 
 
 def save(event: Event) -> int:
@@ -23,11 +27,10 @@ def save(event: Event) -> int:
     return saved_event.id
 
 
-def get_event_list(user_id: int, start: datetime, end: datetime) -> List[Event]:
-    return (
-        db.session.query(Event)
+def get_event_list(user_id: int, start: datetime, end: datetime) -> Sequence[Event]:
+    return db.session.scalars(
+        select(Event)
         .filter_by(user_id=user_id)
-        .filter(Event.start >= start.astimezone(tzlocal()))
-        .filter(Event.start < end.astimezone(tzlocal()))
-        .all()
-    )
+        .where(Event.start >= start.astimezone(tzlocal()))
+        .where(Event.start < end.astimezone(tzlocal())),
+    ).all()
