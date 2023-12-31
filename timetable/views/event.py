@@ -6,34 +6,17 @@ from marshmallow import ValidationError
 from timetable import AppError, app, db
 from timetable.consts import CATEGORIES
 from timetable.models.event import Event
-from timetable.schemas.event import categories_schema, event_id_schema, event_schema
+from timetable.schemas.event import event_id_schema, event_schema
 from timetable.services import event as event_service
+
+from .models.event import CategoryResponse
 
 
 @app.get('/api/event/categories')
 @login_required
-def get_event_categories() -> Response:
-    """
-    ---
-    get:
-      summary: Get event categories.
-      tags: [event]
-      x-swagger-router-controller: timetable.views.event
-      operationId: get_event_categories
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  categories:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/Category'
-    """
-    return jsonify(categories=categories_schema.dump(CATEGORIES))
+def get_event_categories() -> dict:
+    resp = CategoryResponse.model_validate({'categories': CATEGORIES})
+    return resp.model_dump()
 
 
 @app.get('/api/event/list')
