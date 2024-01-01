@@ -1,13 +1,23 @@
 from datetime import datetime
-from typing import Optional
+from typing import Annotated, Optional
 
 from flask_login import current_user
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
+from pydantic.functional_validators import AfterValidator
 
 from timetable.consts import CATEGORIES
 from timetable.services import event as event_svc
 
 from . import PositiveInt
+
+
+def check_event_id(value: int) -> int:
+    if event_svc.get_event(current_user.id, value) is None:
+        raise ValueError('Event not found')
+    return value
+
+
+ValidEventId = Annotated[PositiveInt, AfterValidator(check_event_id)]
 
 
 class Category(BaseModel):
@@ -21,14 +31,7 @@ class CategoryResponse(BaseModel):
 
 
 class EventId(BaseModel):
-    id: PositiveInt
-
-    @field_validator('id')
-    @classmethod
-    def validate_id(cls, value: int) -> int:
-        if event_svc.get_event(current_user.id, value) is None:
-            raise ValueError('Event not found')
-        return value
+    id: ValidEventId
 
 
 class EventListRequest(BaseModel):
@@ -51,18 +54,11 @@ class EventListResponse(BaseModel):
 
 
 class EventForm(BaseModel):
-    id: Optional[PositiveInt] = None
+    id: Optional[ValidEventId] = None
     category_id: PositiveInt = Field(alias='categoryId')
     title: str
     start: datetime
     end: datetime
-
-    @field_validator('id')
-    @classmethod
-    def validate_id(cls, value: int) -> int:  # TODO Optional
-        if event_svc.get_event(current_user.id, value) is None:
-            raise ValueError('Event not found')
-        return value
 
     @field_validator('category_id')
     @classmethod

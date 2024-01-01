@@ -14,6 +14,9 @@ def handle_app_error(error: AppError) -> Tuple[Response, int]:
     return jsonify(payload), 400
 
 
+# TODO Validation error
+
+
 @app.get('/api/ping')
 def ping() -> Response:
     """

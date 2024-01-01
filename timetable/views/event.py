@@ -1,4 +1,4 @@
-from flask import request
+from flask import Response, jsonify, request
 from flask_login import current_user, login_required
 
 from timetable import app, db
@@ -17,20 +17,21 @@ def get_event_categories() -> dict:
 
 @app.get('/api/event/list')
 @login_required
-def get_event_list() -> str:  ## TODO Content-type
+def get_event_list() -> Response:
     form = EventListRequest(**request.args)
     events = event_svc.get_event_list(current_user.id, form.start, form.end)
-    return EventListResponse(events=events).model_dump_json(by_alias=True)
+    resp = EventListResponse(events=events).model_dump_json(by_alias=True)
+    return Response(resp, mimetype='application/json')
 
 
 @app.post('/api/event/save')
 @login_required
-def save_event() -> dict:
+def save_event() -> Response:
     form = EventForm.model_validate(request.json)
     event = Event(**dict(form), user_id=current_user.id)
     event_id = event_svc.save(event)
     db.session.commit()
-    return EventId(id=event_id).model_dump()
+    return jsonify(id=event_id)
 
 
 @app.post('/api/event/delete')
