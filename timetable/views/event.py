@@ -6,6 +6,7 @@ from timetable.consts import CATEGORIES
 from timetable.models.event import Event
 from timetable.services import event as event_svc
 
+from . import send_json
 from .models.event import CategoryResponse, EventForm, EventId, EventListRequest, EventListResponse
 
 
@@ -20,8 +21,7 @@ def get_event_categories() -> dict:
 def get_event_list() -> Response:
     form = EventListRequest(**request.args)
     events = event_svc.get_event_list(current_user.id, form.start, form.end)
-    resp = EventListResponse(events=events).model_dump_json(by_alias=True)
-    return Response(resp, mimetype='application/json')
+    return send_json(EventListResponse(events=events).model_dump_json(by_alias=True))
 
 
 @app.post('/api/event/save')

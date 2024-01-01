@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Optional, Sequence
+from typing import Sequence
 
 from sqlalchemy import delete, select
 
@@ -7,13 +7,15 @@ from timetable import db, utils
 from timetable.models.note import Note
 
 
-def get_note_content(user_id: int) -> str:
-    note_content: Optional[str] = db.session.scalar(
-        select(Note.content)
+def get_or_create_note(user_id: int) -> Note:
+    note = db.session.scalar(
+        select(Note)
         .filter_by(user_id=user_id)
         .order_by(Note.id.desc()),
     )
-    return note_content or ''
+    if note is None:
+        note = Note(user_id=user_id, content='', created=datetime.now())
+    return note
 
 
 def save(note: Note):

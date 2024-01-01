@@ -28,6 +28,10 @@ def ping() -> Response:
     return Response('pong', mimetype='text/plain')
 
 
+def send_json(data: str) -> Response:
+    return Response(data, mimetype='application/json')
+
+
 import timetable.views.event
 import timetable.views.note
 import timetable.views.user
