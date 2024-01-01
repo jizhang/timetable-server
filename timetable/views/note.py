@@ -13,7 +13,7 @@ from .models.note import NoteForm
 @login_required
 def get_note_content() -> dict:
     content = note_svc.get_note_content(current_user.id)
-    return NoteForm(content=content).model_dump()
+    return NoteForm(content=content).model_dump()  ## TODO Return NoteResponse
 
 
 @app.post('/api/note/save')
