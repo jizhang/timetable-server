@@ -34,3 +34,9 @@ def get_event_list(user_id: int, start: datetime, end: datetime) -> Sequence[Eve
         .where(Event.start >= start.astimezone(tzlocal()))
         .where(Event.start < end.astimezone(tzlocal())),
     ).all()
+
+
+def delete_event(event_id: int):
+    event = db.session.get(Event, event_id)
+    assert event is not None
+    db.session.delete(event)
