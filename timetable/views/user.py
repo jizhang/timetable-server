@@ -20,5 +20,5 @@ def user_login() -> dict:
 
     login_user(user, remember=True)
 
-    resp = CurrentUser.model_validate(user, from_attributes=True)
-    return resp.model_dump()
+    resp = CurrentUser.model_validate(user)
+    return resp.model_dump(mode='json')
