@@ -1,17 +1,9 @@
-default: web
-
-dev:
+install:
 	poetry install
 
-web:
+dev:
 	poetry run flask run
 
-gen:
-	poetry run flask gen
-
 test:
-	poetry run ruff --fix timetable
+	poetry run ruff check --fix timetable
 	poetry run mypy timetable
-
-prod:
-	poetry install --extras gunicorn --without dev

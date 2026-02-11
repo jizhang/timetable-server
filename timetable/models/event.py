@@ -1,5 +1,6 @@
 from datetime import datetime
 
+from sqlalchemy import func
 from sqlalchemy.orm import Mapped, mapped_column
 
 from . import Base
@@ -15,4 +16,4 @@ class Event(Base):
     start: Mapped[datetime]
     end: Mapped[datetime]
     created: Mapped[datetime]
-    updated: Mapped[datetime]
+    updated: Mapped[datetime] = mapped_column(server_default=func.now())

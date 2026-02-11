@@ -5,6 +5,7 @@ __pycache__
 .mypy_cache
 application.cfg
 timetable.log
+/dist/
 
 # Database
 *.db
